@@ -8,35 +8,110 @@
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    body {
-      background: linear-gradient(to bottom, #0f172a, #1e293b);
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+    .reaction-bubble {
+      position: absolute;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-weight: bold;
       color: white;
-      margin: 0;
-      text-align: center;
+      animation: floatUp 5s ease-in-out forwards;
+      z-index: 10;
     }
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 0.5rem;
-    }
-    p {
-      font-size: 1.25rem;
-    }
-    .logo {
-      width: 100px;
-      height: 100px;
-      margin-bottom: 1rem;
+    @keyframes floatUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      10% { opacity: 1; transform: translateY(0); }
+      90% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-20px); }
     }
   </style>
 </head>
-<body>
-  <img src="https://revuo.app/assets/logo-splash.png" alt="Vidaro Logo" class="logo">
-  <h1>Vidaro</h1>
-  <p>Where Video Meets Insight</p>
+<body class="bg-gray-100 font-sans text-gray-900">
+
+  <header class="bg-white shadow p-4 text-center">
+    <h1 class="text-3xl font-bold text-indigo-700">Vidaro</h1>
+    <p class="text-sm text-gray-500">Where Video Meets Insight</p>
+  </header>
+
+  <main class="max-w-4xl mx-auto p-6">
+    <!-- Video Source Input -->
+    <div class="bg-white rounded shadow p-4 mb-6">
+      <label class="block font-medium mb-2">Paste Video URL or Upload File</label>
+      <input id="videoURLInput" type="text" placeholder="e.g., https://example.com/video.mp4" class="border rounded p-2 w-full mb-2">
+      <input id="videoFileInput" type="file" accept="video/*" class="mb-2">
+      <button onclick="loadCustomVideo()" class="bg-blue-600 text-white px-4 py-2 rounded">Load Video</button>
+    </div>
+
+    <!-- Video Player -->
+    <div class="relative mb-6">
+      <video id="videoPlayer" class="w-full rounded-lg shadow-md" controls>
+        <source id="videoSource" src="" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <!-- Reaction Bubbles -->
+    <div id="reactionGroups" class="space-y-4 mb-6"></div>
+
+    <!-- Reaction Builder -->
+    <div class="bg-white rounded shadow p-4">
+      <h2 class="text-lg font-semibold mb-2">Create Reaction Group</h2>
+      <input id="categoryInput" type="text" placeholder="Category (e.g., Signing Clarity)" class="border p-2 rounded w-full mb-2">
+      <div class="grid grid-cols-3 gap-4">
+        <div><input type="text" placeholder="Level 1" class="levelInput border p-2 rounded w-full mb-1"><input type="color" class="colorInput w-full"></div>
+        <div><input type="text" placeholder="Level 2" class="levelInput border p-2 rounded w-full mb-1"><input type="color" class="colorInput w-full"></div>
+        <div><input type="text" placeholder="Level 3" class="levelInput border p-2 rounded w-full mb-1"><input type="color" class="colorInput w-full"></div>
+      </div>
+      <button onclick="addReactionGroup()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Add Reaction Group</button>
+    </div>
+  </main>
+
+  <script>
+    let reactionsLog = [];
+
+    function loadCustomVideo() {
+      const urlInput = document.getElementById('videoURLInput').value.trim();
+      const fileInput = document.getElementById('videoFileInput').files[0];
+      const video = document.getElementById('videoPlayer');
+      const source = document.getElementById('videoSource');
+      if (fileInput) {
+        source.src = URL.createObjectURL(fileInput);
+      } else if (urlInput) {
+        source.src = urlInput;
+      } else {
+        alert('Please select a video file or enter a link.');
+        return;
+      }
+      video.load();
+    }
+
+    function addReactionGroup() {
+      const catInput = document.getElementById('categoryInput').value.trim();
+      const levels = Array.from(document.querySelectorAll('.levelInput')).map(i => i.value.trim());
+      const colors = Array.from(document.querySelectorAll('.colorInput')).map(i => i.value);
+      if (!catInput || levels.some(l => !l)) return alert('Please fill in all fields.');
+
+      const group = document.createElement('div');
+      group.className = 'bg-gray-200 p-4 rounded shadow-sm';
+      group.innerHTML = `<h4 class="font-semibold mb-2">${catInput}</h4><div class="flex gap-4">` +
+        levels.map((text, i) => `<button onclick="showBubble('${text}', '${colors[i]}')" style="background-color:${colors[i]}" class="text-white px-3 py-2 rounded">${text}</button>`).join('') + `</div>`;
+      document.getElementById('reactionGroups').appendChild(group);
+
+      document.getElementById('categoryInput').value = '';
+      document.querySelectorAll('.levelInput').forEach(el => el.value = '');
+      document.querySelectorAll('.colorInput').forEach(el => el.value = '#cccccc');
+    }
+
+    function showBubble(text, color) {
+      const bubble = document.createElement('div');
+      bubble.className = 'reaction-bubble';
+      bubble.style.backgroundColor = color;
+      bubble.style.top = '20px';
+      bubble.style.left = '20px';
+      bubble.innerText = text;
+      document.body.appendChild(bubble);
+      setTimeout(() => bubble.remove(), 5000);
+    }
+  </script>
+
 </body>
 </html>
