@@ -2,116 +2,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vidaro</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    .reaction-bubble {
-      position: absolute;
-      padding: 0.5rem 1rem;
-      border-radius: 9999px;
-      font-weight: bold;
-      color: white;
-      animation: floatUp 5s ease-in-out forwards;
-      z-index: 10;
-    }
-    @keyframes floatUp {
-      0% { opacity: 0; transform: translateY(20px); }
-      10% { opacity: 1; transform: translateY(0); }
-      90% { opacity: 1; }
-      100% { opacity: 0; transform: translateY(-20px); }
-    }
-  </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+    const firebaseConfig = {'apiKey': 'AIzaSyCaiqQnXJHjxE16WvEGjxbFQJZQnPVASVk', 'authDomain': 'vidaro-e9b55.firebaseapp.com', 'projectId': 'vidaro-e9b55', 'storageBucket': 'vidaro-e9b55.firebasestorage.app', 'messagingSenderId': '1048856992681', 'appId': '1:1048856992681:web:5c05859353365caca002b8'};
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.signIn = async function () {
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("Logged in!");
+        document.getElementById("loginModal").classList.add("hidden");
+      } catch (error) {
+        alert(error.message);
+      }
+    };
+
+    window.signUp = async function () {
+      const email = document.getElementById("signupEmail").value;
+      const password = document.getElementById("signupPassword").value;
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        alert("Account created!");
+        document.getElementById("signupModal").classList.add("hidden");
+      } catch (error) {
+        alert(error.message);
+      }
+    };
+
+    window.logOut = async function () {
+      await signOut(auth);
+      alert("Logged out.");
+    };
+
+    onAuthStateChanged(auth, user => {
+      const appContent = document.getElementById("appContent");
+      const authNotice = document.getElementById("authNotice");
+      const authControls = document.getElementById("authControls");
+
+      if (user) {
+        appContent.classList.remove("hidden");
+        authNotice.textContent = `Logged in as ${user.email}`;
+        authControls.innerHTML = '<button onclick="logOut()" class="bg-red-600 text-white px-4 py-2 rounded">Logout</button>';
+      } else {
+        appContent.classList.add("hidden");
+        authNotice.textContent = "Not logged in";
+        authControls.innerHTML = '<button onclick="document.getElementById(\'loginModal\').classList.remove(\'hidden\')" class="bg-blue-600 text-white px-4 py-2 rounded mr-2">Login</button>' +
+                                 '<button onclick="document.getElementById(\'signupModal\').classList.remove(\'hidden\')" class="bg-green-600 text-white px-4 py-2 rounded">Sign Up</button>';
+      }
+    });
+  </script>
 </head>
 <body class="bg-gray-100 font-sans text-gray-900">
-
   <header class="bg-white shadow p-4 text-center">
     <h1 class="text-3xl font-bold text-indigo-700">Vidaro</h1>
     <p class="text-sm text-gray-500">Where Video Meets Insight</p>
+    <div id="authNotice" class="text-sm mt-2 text-gray-600">Checking authentication...</div>
+    <div id="authControls" class="mt-2"></div>
   </header>
-
-  <main class="max-w-4xl mx-auto p-6">
-    <!-- Video Source Input -->
-    <div class="bg-white rounded shadow p-4 mb-6">
-      <label class="block font-medium mb-2">Paste Video URL or Upload File</label>
-      <input id="videoURLInput" type="text" placeholder="e.g., https://example.com/video.mp4" class="border rounded p-2 w-full mb-2">
-      <input id="videoFileInput" type="file" accept="video/*" class="mb-2">
-      <button onclick="loadCustomVideo()" class="bg-blue-600 text-white px-4 py-2 rounded">Load Video</button>
-    </div>
-
-    <!-- Video Player -->
-    <div class="relative mb-6">
-      <video id="videoPlayer" class="w-full rounded-lg shadow-md" controls>
-        <source id="videoSource" src="" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
-
-    <!-- Reaction Bubbles -->
-    <div id="reactionGroups" class="space-y-4 mb-6"></div>
-
-    <!-- Reaction Builder -->
-    <div class="bg-white rounded shadow p-4">
-      <h2 class="text-lg font-semibold mb-2">Create Reaction Group</h2>
-      <input id="categoryInput" type="text" placeholder="Category (e.g., Signing Clarity)" class="border p-2 rounded w-full mb-2">
-      <div class="grid grid-cols-3 gap-4">
-        <div><input type="text" placeholder="Level 1" class="levelInput border p-2 rounded w-full mb-1"><input type="color" class="colorInput w-full"></div>
-        <div><input type="text" placeholder="Level 2" class="levelInput border p-2 rounded w-full mb-1"><input type="color" class="colorInput w-full"></div>
-        <div><input type="text" placeholder="Level 3" class="levelInput border p-2 rounded w-full mb-1"><input type="color" class="colorInput w-full"></div>
+  <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded shadow-md w-80">
+      <h2 class="text-xl font-semibold mb-4">Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email" class="border p-2 mb-2 w-full rounded">
+      <input type="password" id="loginPassword" placeholder="Password" class="border p-2 mb-4 w-full rounded">
+      <div class="flex justify-between">
+        <button onclick="document.getElementById('loginModal').classList.add('hidden')" class="text-sm text-gray-600">Cancel</button>
+        <button onclick="signIn()" class="bg-blue-600 text-white px-4 py-2 rounded">Login</button>
       </div>
-      <button onclick="addReactionGroup()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Add Reaction Group</button>
     </div>
-  </main>
-
-  <script>
-    let reactionsLog = [];
-
-    function loadCustomVideo() {
-      const urlInput = document.getElementById('videoURLInput').value.trim();
-      const fileInput = document.getElementById('videoFileInput').files[0];
-      const video = document.getElementById('videoPlayer');
-      const source = document.getElementById('videoSource');
-      if (fileInput) {
-        source.src = URL.createObjectURL(fileInput);
-      } else if (urlInput) {
-        source.src = urlInput;
-      } else {
-        alert('Please select a video file or enter a link.');
-        return;
-      }
-      video.load();
-    }
-
-    function addReactionGroup() {
-      const catInput = document.getElementById('categoryInput').value.trim();
-      const levels = Array.from(document.querySelectorAll('.levelInput')).map(i => i.value.trim());
-      const colors = Array.from(document.querySelectorAll('.colorInput')).map(i => i.value);
-      if (!catInput || levels.some(l => !l)) return alert('Please fill in all fields.');
-
-      const group = document.createElement('div');
-      group.className = 'bg-gray-200 p-4 rounded shadow-sm';
-      group.innerHTML = `<h4 class="font-semibold mb-2">${catInput}</h4><div class="flex gap-4">` +
-        levels.map((text, i) => `<button onclick="showBubble('${text}', '${colors[i]}')" style="background-color:${colors[i]}" class="text-white px-3 py-2 rounded">${text}</button>`).join('') + `</div>`;
-      document.getElementById('reactionGroups').appendChild(group);
-
-      document.getElementById('categoryInput').value = '';
-      document.querySelectorAll('.levelInput').forEach(el => el.value = '');
-      document.querySelectorAll('.colorInput').forEach(el => el.value = '#cccccc');
-    }
-
-    function showBubble(text, color) {
-      const bubble = document.createElement('div');
-      bubble.className = 'reaction-bubble';
-      bubble.style.backgroundColor = color;
-      bubble.style.top = '20px';
-      bubble.style.left = '20px';
-      bubble.innerText = text;
-      document.body.appendChild(bubble);
-      setTimeout(() => bubble.remove(), 5000);
-    }
-  </script>
-
+  </div>
+  <div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded shadow-md w-80">
+      <h2 class="text-xl font-semibold mb-4">Sign Up</h2>
+      <input type="email" id="signupEmail" placeholder="Email" class="border p-2 mb-2 w-full rounded">
+      <input type="password" id="signupPassword" placeholder="Password" class="border p-2 mb-4 w-full rounded">
+      <div class="flex justify-between">
+        <button onclick="document.getElementById('signupModal').classList.add('hidden')" class="text-sm text-gray-600">Cancel</button>
+        <button onclick="signUp()" class="bg-green-600 text-white px-4 py-2 rounded">Sign Up</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
