@@ -1,1 +1,96 @@
-<!DOCTYPE html><html><head><title>Vidaro Auth</title></head><body><h1>Placeholder for Vidaro Auth UI</h1></body></html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vidaro</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900">
+  <header class="bg-white shadow-md p-4 flex items-center justify-between max-w-4xl mx-auto">
+    <div class="flex items-center gap-2">
+      <img src="favicon.ico" alt="Logo" class="w-8 h-8">
+      <h1 class="text-xl font-bold text-indigo-700">Vidaro</h1>
+    </div>
+    <div id="authState" class="text-sm text-gray-700"></div>
+  </header>
+
+  <main class="max-w-4xl mx-auto mt-10 px-4">
+    <div id="authContainer" class="bg-white shadow-md rounded p-6">
+      <h2 class="text-xl font-semibold mb-4" id="formTitle">Log In</h2>
+      <input id="email" type="email" placeholder="Email" class="w-full p-2 mb-3 border rounded" />
+      <input id="password" type="password" placeholder="Password" class="w-full p-2 mb-3 border rounded" />
+      <button onclick="handleAuth()" class="bg-indigo-600 text-white w-full py-2 rounded hover:bg-indigo-700 transition">
+        Continue
+      </button>
+      <p class="text-center mt-4">
+        <span id="toggleText">Don't have an account?</span>
+        <button onclick="toggleForm()" class="text-blue-600 hover:underline" id="toggleBtn">Sign Up</button>
+      </p>
+      <p id="authMessage" class="text-center text-sm mt-2 text-red-500"></p>
+    </div>
+  </main>
+
+  <script>
+    // Firebase config for Vidaro
+    const firebaseConfig = {
+      apiKey: "AIzaSyCaiqQnXJHjxE16WvEGjxbFQJZQnPVASVk",
+      authDomain: "vidaro-e9b55.firebaseapp.com",
+      projectId: "vidaro-e9b55",
+      storageBucket: "vidaro-e9b55.appspot.com",
+      messagingSenderId: "1048856992681",
+      appId: "1:1048856992681:web:5c05859353365caca002b8"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    let isLogin = true;
+
+    function toggleForm() {
+      isLogin = !isLogin;
+      document.getElementById("formTitle").innerText = isLogin ? "Log In" : "Sign Up";
+      document.getElementById("toggleText").innerText = isLogin ? "Don't have an account?" : "Already have an account?";
+      document.getElementById("toggleBtn").innerText = isLogin ? "Sign Up" : "Log In";
+      document.getElementById("authMessage").innerText = "";
+    }
+
+    function handleAuth() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const message = document.getElementById("authMessage");
+
+      if (!email || !password) {
+        message.innerText = "Please enter both email and password.";
+        return;
+      }
+
+      if (isLogin) {
+        auth.signInWithEmailAndPassword(email, password)
+          .catch(err => message.innerText = err.message);
+      } else {
+        auth.createUserWithEmailAndPassword(email, password)
+          .catch(err => message.innerText = err.message);
+      }
+    }
+
+    auth.onAuthStateChanged(user => {
+      const stateEl = document.getElementById("authState");
+      if (user) {
+        stateEl.innerHTML = \`Welcome, <strong>\${user.email}</strong> <button onclick="logout()" class="ml-2 text-red-600 hover:underline">Log out</button>\`;
+        document.getElementById("authContainer").classList.add("hidden");
+      } else {
+        stateEl.innerHTML = "";
+        document.getElementById("authContainer").classList.remove("hidden");
+      }
+    });
+
+    function logout() {
+      auth.signOut();
+    }
+  </script>
+</body>
+</html>
