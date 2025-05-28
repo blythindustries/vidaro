@@ -30,7 +30,7 @@
     <h1 class="text-3xl font-bold text-indigo-700">Vidaro</h1>
     <p class="text-sm text-gray-500">Where Video Meets Insight</p>
   </header>
-  <main class="p-4 max-w-4xl mx-auto">
+  <main class="p-4 max-w-6xl mx-auto">
     <section class="mb-4">
       <label class="block mb-2 font-semibold">Paste a Video Link:</label>
       <input id="videoInput" type="text" placeholder="YouTube, Vimeo or MP4 URL..." class="w-full p-2 border border-gray-300 rounded mb-2"/>
@@ -42,7 +42,7 @@
 
     <section class="mb-4">
       <h2 class="text-xl font-semibold mb-2">Reactions</h2>
-      <div id="reactionButtons" class="flex gap-2 flex-wrap mb-2"></div>
+      <div id="reactionGroups" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4"></div>
       <button onclick="generatePDF()" class="mt-2 bg-green-600 text-white px-4 py-2 rounded">Generate PDF</button>
     </section>
 
@@ -88,15 +88,30 @@
     }
 
     function renderButtons() {
-      const container = document.getElementById("reactionButtons");
+      const container = document.getElementById("reactionGroups");
       container.innerHTML = "";
-      reactions.forEach((r, index) => {
-        const btn = document.createElement("button");
-        btn.textContent = r.text;
-        btn.style.backgroundColor = r.color;
-        btn.className = "text-white px-3 py-1 rounded";
-        btn.onclick = () => logReaction(r.text, r.color, r.category);
-        container.appendChild(btn);
+      const grouped = reactions.reduce((acc, r) => {
+        acc[r.category] = acc[r.category] || [];
+        acc[r.category].push(r);
+        return acc;
+      }, {});
+
+      Object.keys(grouped).forEach(group => {
+        const col = document.createElement("div");
+        col.className = "bg-white p-3 rounded shadow";
+        const header = document.createElement("h3");
+        header.textContent = group;
+        header.className = "font-bold mb-2";
+        col.appendChild(header);
+        grouped[group].forEach(r => {
+          const btn = document.createElement("button");
+          btn.textContent = r.text;
+          btn.style.backgroundColor = r.color;
+          btn.className = "text-white w-full mb-2 px-2 py-1 rounded";
+          btn.onclick = () => logReaction(r.text, r.color, r.category);
+          col.appendChild(btn);
+        });
+        container.appendChild(col);
       });
     }
 
