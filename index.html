@@ -36,7 +36,6 @@
   </main>
 
   <script>
-    // Firebase config for Vidaro
     const firebaseConfig = {
       apiKey: "AIzaSyCaiqQnXJHjxE16WvEGjxbFQJZQnPVASVk",
       authDomain: "vidaro-e9b55.firebaseapp.com",
@@ -50,15 +49,15 @@
 
     let isLogin = true;
 
-    window.toggleForm = function () {
+    function toggleForm() {
       isLogin = !isLogin;
       document.getElementById("formTitle").innerText = isLogin ? "Log In" : "Sign Up";
       document.getElementById("toggleText").innerText = isLogin ? "Don't have an account?" : "Already have an account?";
       document.getElementById("toggleBtn").innerText = isLogin ? "Sign Up" : "Log In";
       document.getElementById("authMessage").innerText = "";
-    };
+    }
 
-    window.handleAuth = function () {
+    function handleAuth() {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
       const message = document.getElementById("authMessage");
@@ -75,16 +74,16 @@
         auth.createUserWithEmailAndPassword(email, password)
           .catch(err => message.innerText = err.message);
       }
-    };
+    }
 
-    window.logout = function () {
+    function logout() {
       auth.signOut();
-    };
+    }
 
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged(function(user) {
       const stateEl = document.getElementById("authState");
       if (user) {
-        stateEl.innerHTML = \`Welcome, <strong>\${user.email}</strong> <button onclick="logout()" class="ml-2 text-red-600 hover:underline">Log out</button>\`;
+        stateEl.innerHTML = "Welcome, <strong>" + user.email + "</strong> <button onclick='logout()' class='ml-2 text-red-600 hover:underline'>Log out</button>";
         document.getElementById("authContainer").classList.add("hidden");
       } else {
         stateEl.innerHTML = "";
