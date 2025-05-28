@@ -7,22 +7,78 @@
   <title>Vidaro</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
   <header class="bg-white shadow p-4 text-center">
     <h1 class="text-3xl font-bold text-indigo-700">Vidaro</h1>
     <p class="text-sm text-gray-500">Where Video Meets Insight</p>
   </header>
-  <main class="p-4 max-w-3xl mx-auto">
-    <p class="mb-4 text-lg">✅ Vidaro 1.0 Beta is Live</p>
-    <ul class="list-disc list-inside text-sm text-gray-700">
-      <li>✅ Video playback (YouTube/local)</li>
-      <li>✅ Custom reaction folders (Clarity, Confidence, etc.)</li>
-      <li>✅ Firebase Auth + Firestore integration</li>
-      <li>✅ Reaction logging with timestamp + category</li>
-      <li>✅ PDF export of session reactions</li>
-    </ul>
-    <p class="mt-4 text-sm italic text-gray-500">Full interactive interface will appear here when deployed. This placeholder confirms final structure has been packed.</p>
+  <main class="p-4 max-w-4xl mx-auto">
+    <section class="mb-4">
+      <label class="block mb-2 font-semibold">Load a YouTube Video:</label>
+      <input id="youtubeInput" type="text" placeholder="Paste YouTube link here..." class="w-full p-2 border border-gray-300 rounded mb-2"/>
+      <button onclick="loadYouTubeVideo()" class="bg-indigo-600 text-white px-4 py-2 rounded">Load Video</button>
+    </section>
+    <div id="videoContainer" class="mb-4 hidden">
+      <iframe id="youtubePlayer" class="w-full h-64" allowfullscreen></iframe>
+    </div>
+    <section class="mb-4">
+      <h2 class="text-xl font-semibold mb-2">Reactions</h2>
+      <div id="reactionButtons" class="flex gap-2"></div>
+      <button onclick="generatePDF()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Generate PDF</button>
+    </section>
+    <pre id="reactionLog" class="bg-gray-100 p-4 rounded text-sm"></pre>
   </main>
+  <script>
+    const reactions = [
+      { text: "Needs Improvement", color: "#f87171", category: "Clarity" },
+      { text: "Good", color: "#fbbf24", category: "Clarity" },
+      { text: "Excellent", color: "#34d399", category: "Clarity" }
+    ];
+    const log = [];
+
+    function loadYouTubeVideo() {
+      const link = document.getElementById("youtubeInput").value;
+      const videoId = link.split("v=")[1]?.split("&")[0];
+      if (videoId) {
+        document.getElementById("youtubePlayer").src = `https://www.youtube.com/embed/${videoId}`;
+        document.getElementById("videoContainer").classList.remove("hidden");
+      }
+    }
+
+    function logReaction(text, color, category) {
+      const time = new Date().toLocaleTimeString();
+      const entry = { text, color, category, time };
+      log.push(entry);
+      document.getElementById("reactionLog").textContent = JSON.stringify(log, null, 2);
+    }
+
+    function renderButtons() {
+      const container = document.getElementById("reactionButtons");
+      reactions.forEach(r => {
+        const btn = document.createElement("button");
+        btn.textContent = r.text;
+        btn.style.backgroundColor = r.color;
+        btn.className = "text-white px-3 py-1 rounded";
+        btn.onclick = () => logReaction(r.text, r.color, r.category);
+        container.appendChild(btn);
+      });
+    }
+
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(16);
+      doc.text("Vidaro Reaction Summary", 20, 20);
+      doc.setFontSize(12);
+      log.forEach((entry, i) => {
+        doc.text(`- ${entry.time}: ${entry.text} (${entry.category})`, 20, 40 + i * 10);
+      });
+      doc.save("vidaro_reaction_summary.pdf");
+    }
+
+    renderButtons();
+  </script>
 </body>
 </html>
