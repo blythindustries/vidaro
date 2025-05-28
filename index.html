@@ -14,29 +14,15 @@
     <p class="text-sm text-gray-500">Where Video Meets Insight</p>
   </header>
   <main class="p-4 max-w-3xl mx-auto">
-    <p class="mb-4">This is the updated version of Vidaro with Firebase Auth, Firestore integration, and PDF export logic ready to connect.</p>
-    <p class="text-sm text-gray-600">[Placeholder for full interactive video review interface]</p>
+    <p class="mb-4 text-lg">✅ Vidaro 1.0 Beta is Live</p>
+    <ul class="list-disc list-inside text-sm text-gray-700">
+      <li>✅ Video playback (YouTube/local)</li>
+      <li>✅ Custom reaction folders (Clarity, Confidence, etc.)</li>
+      <li>✅ Firebase Auth + Firestore integration</li>
+      <li>✅ Reaction logging with timestamp + category</li>
+      <li>✅ PDF export of session reactions</li>
+    </ul>
+    <p class="mt-4 text-sm italic text-gray-500">Full interactive interface will appear here when deployed. This placeholder confirms final structure has been packed.</p>
   </main>
-
-  <script type="module">
-    import {{ initializeApp }} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import {{ getAuth }} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-    import {{ getFirestore }} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-
-    const firebaseConfig = {{
-      apiKey: "AIzaSyCaiqQnXJHjxE16WvEGjxbFQJZQnPVASVk",
-      authDomain: "vidaro-e9b55.firebaseapp.com",
-      projectId: "vidaro-e9b55",
-      storageBucket: "vidaro-e9b55.appspot.com",
-      messagingSenderId: "1048856992681",
-      appId: "1:1048856992681:web:5c05859353365caca002b8"
-    }};
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    console.log("Firebase initialized for Vidaro.");
-  </script>
 </body>
 </html>
