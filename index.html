@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,14 +6,228 @@
   <title>Vidaro</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    #bubble {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-weight: bold;
+      color: white;
+      display: none;
+      z-index: 10;
+      animation: fadeInOut 5s ease-in-out;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    .video-wrapper {
+      position: relative;
+    }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
-  <header class="bg-white shadow p-4 flex items-center justify-center gap-3">
+  <header class="bg-white shadow-md p-4 flex items-center justify-center gap-3 sticky top-0 z-50">
     <img src="favicon.ico" alt="Vidaro Logo" class="w-8 h-8">
     <h1 class="text-2xl font-bold text-indigo-700">Vidaro</h1>
   </header>
-  <main class="p-6 text-center">
-    <p class="text-lg text-gray-700">This is the new pilot UI version with logo integrated.</p>
+  <main class="p-4 max-w-6xl mx-auto">
+    <section class="mb-6">
+      <label class="block mb-2 font-semibold">🎥 Paste a Video Link:</label>
+      <div class="flex gap-2">
+        <input id="videoInput" type="text" placeholder="YouTube, Vimeo or MP4 URL..." class="flex-1 p-2 border border-gray-300 rounded"/>
+        <button onclick="loadVideo()" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">Load</button>
+      </div>
+    </section>
+    <div id="videoContainer" class="mb-6 video-wrapper hidden border rounded shadow overflow-hidden">
+      <div id="bubble"></div>
+    </div>
+
+    <section class="mb-6">
+      <h2 class="text-2xl font-semibold mb-4">🗯 Reactions</h2>
+      <div id="reactionGroups" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4"></div>
+      <button onclick="generatePDF()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">📄 Download PDF</button>
+    </section>
+
+    <section class="mb-6">
+      <h2 class="text-2xl font-semibold mb-4">📝 Reaction Log</h2>
+      <div id="reactionLog" class="bg-white border p-4 rounded shadow text-sm whitespace-pre-line font-mono"></div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">⚙️ Customize Reactions</h2>
+      <div id="reactionEditor" class="mb-4"></div>
+      <button onclick="addReactionGroup()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">+ Add Reaction Group</button>
+    </section>
   </main>
+
+  <script>
+    let reactions = [
+      { text: "Needs Improvement", color: "#f87171", category: "Clarity" },
+      { text: "Good", color: "#fbbf24", category: "Clarity" },
+      { text: "Excellent", color: "#34d399", category: "Clarity" }
+    ];
+    const log = [];
+
+    function showBubble(text, color) {
+      const bubble = document.getElementById("bubble");
+      bubble.textContent = text;
+      bubble.style.backgroundColor = color;
+      bubble.style.display = "block";
+      setTimeout(() => { bubble.style.display = "none"; }, 5000);
+    }
+
+    function logReaction(text, color, category) {
+      const time = new Date().toLocaleTimeString();
+      const entry = { text, color, category, time };
+      log.push(entry);
+      updateLogDisplay();
+      showBubble(text, color);
+    }
+
+    function updateLogDisplay() {
+      const logText = log.map(e => `🕒 ${e.time} — ${e.category}: ${e.text}`).join("\n");
+      document.getElementById("reactionLog").textContent = logText;
+    }
+
+    function renderButtons() {
+      const container = document.getElementById("reactionGroups");
+      container.innerHTML = "";
+      const grouped = reactions.reduce((acc, r) => {
+        acc[r.category] = acc[r.category] || [];
+        acc[r.category].push(r);
+        return acc;
+      }, {});
+      Object.keys(grouped).forEach(group => {
+        const col = document.createElement("div");
+        col.className = "bg-white p-4 rounded shadow border";
+        const header = document.createElement("h3");
+        header.textContent = group;
+        header.className = "font-bold mb-2 text-indigo-600";
+        col.appendChild(header);
+        grouped[group].forEach(r => {
+          const btn = document.createElement("button");
+          btn.textContent = r.text;
+          btn.style.backgroundColor = r.color;
+          btn.className = "text-white w-full mb-2 px-2 py-1 rounded hover:opacity-90 transition";
+          btn.onclick = () => logReaction(r.text, r.color, r.category);
+          col.appendChild(btn);
+        });
+        container.appendChild(col);
+      });
+    }
+
+    function renderEditor() {
+      const container = document.getElementById("reactionEditor");
+      container.innerHTML = "";
+      const grouped = reactions.reduce((acc, r) => {
+        acc[r.category] = acc[r.category] || [];
+        acc[r.category].push(r);
+        return acc;
+      }, {});
+      Object.keys(grouped).forEach(group => {
+        const groupDiv = document.createElement("div");
+        groupDiv.className = "mb-4 p-3 border border-gray-300 rounded bg-white shadow";
+        const title = document.createElement("h3");
+        title.textContent = group;
+        title.className = "font-bold text-lg mb-2";
+        groupDiv.appendChild(title);
+        grouped[group].forEach((r, i) => {
+          const row = document.createElement("div");
+          row.className = "flex items-center mb-2 gap-2";
+          row.innerHTML = `
+            <input class="p-1 border rounded flex-1" value="${r.text}" onchange="updateReaction(${reactions.indexOf(r)}, this.value, null)">
+            <input type="color" value="${r.color}" onchange="updateReaction(${reactions.indexOf(r)}, null, this.value)">
+            <button onclick="removeReaction(${reactions.indexOf(r)})" class="text-red-500 hover:text-red-700">🗑</button>
+          `;
+          groupDiv.appendChild(row);
+        });
+        const addBtn = document.createElement("button");
+        addBtn.textContent = "+ Add Reaction";
+        addBtn.className = "text-sm text-blue-600 mt-2 hover:underline";
+        addBtn.onclick = () => addReaction(group);
+        groupDiv.appendChild(addBtn);
+        container.appendChild(groupDiv);
+      });
+    }
+
+    function updateReaction(index, newText, newColor) {
+      if (newText !== null) reactions[index].text = newText;
+      if (newColor !== null) reactions[index].color = newColor;
+      renderButtons();
+      renderEditor();
+    }
+
+    function removeReaction(index) {
+      reactions.splice(index, 1);
+      renderButtons();
+      renderEditor();
+    }
+
+    function addReactionGroup() {
+      const name = prompt("Enter new reaction group name:");
+      if (name) {
+        reactions.push({ text: "Example", color: "#3b82f6", category: name });
+        renderButtons();
+        renderEditor();
+      }
+    }
+
+    function addReaction(group) {
+      reactions.push({ text: "New Reaction", color: "#6b7280", category: group });
+      renderButtons();
+      renderEditor();
+    }
+
+    function getEmbedHTML(url) {
+      if (url.includes("youtube.com/watch?v=") || url.includes("youtu.be")) {
+        const videoId = url.includes("youtu.be")
+          ? url.split("youtu.be/")[1].split("?")[0]
+          : url.split("v=")[1].split("&")[0];
+        return `<iframe class="w-full h-64" src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
+      }
+      if (url.includes("youtube.com/shorts/")) {
+        const videoId = url.split("shorts/")[1].split("?")[0];
+        return `<iframe class="w-full h-64" src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
+      }
+      if (url.includes("vimeo.com")) {
+        const videoId = url.split("vimeo.com/")[1].split("?")[0];
+        return `<iframe class="w-full h-64" src="https://player.vimeo.com/video/${videoId}" allowfullscreen></iframe>`;
+      }
+      if (url.endsWith(".mp4")) {
+        return `<video controls class="w-full h-64"><source src="${url}" type="video/mp4">Your browser does not support the video tag.</video>`;
+      }
+      return "<p class='text-red-500'>Unsupported video format.</p>";
+    }
+
+    function loadVideo() {
+      const url = document.getElementById("videoInput").value.trim();
+      const embedHTML = getEmbedHTML(url);
+      const container = document.getElementById("videoContainer");
+      container.innerHTML = `<div id="bubble"></div>` + embedHTML;
+      container.classList.remove("hidden");
+    }
+
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(16);
+      doc.text("Vidaro Reaction Summary", 20, 20);
+      doc.setFontSize(12);
+      log.forEach((entry, i) => {
+        doc.text(`- ${entry.time}: ${entry.category} — ${entry.text}`, 20, 40 + i * 10);
+      });
+      doc.save("vidaro_reaction_summary.pdf");
+    }
+
+    renderButtons();
+    renderEditor();
+  </script>
 </body>
 </html>
