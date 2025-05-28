@@ -50,15 +50,15 @@
 
     let isLogin = true;
 
-    function toggleForm() {
+    window.toggleForm = function () {
       isLogin = !isLogin;
       document.getElementById("formTitle").innerText = isLogin ? "Log In" : "Sign Up";
       document.getElementById("toggleText").innerText = isLogin ? "Don't have an account?" : "Already have an account?";
       document.getElementById("toggleBtn").innerText = isLogin ? "Sign Up" : "Log In";
       document.getElementById("authMessage").innerText = "";
-    }
+    };
 
-    function handleAuth() {
+    window.handleAuth = function () {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
       const message = document.getElementById("authMessage");
@@ -75,7 +75,11 @@
         auth.createUserWithEmailAndPassword(email, password)
           .catch(err => message.innerText = err.message);
       }
-    }
+    };
+
+    window.logout = function () {
+      auth.signOut();
+    };
 
     auth.onAuthStateChanged(user => {
       const stateEl = document.getElementById("authState");
@@ -87,10 +91,6 @@
         document.getElementById("authContainer").classList.remove("hidden");
       }
     });
-
-    function logout() {
-      auth.signOut();
-    }
   </script>
 </body>
 </html>
