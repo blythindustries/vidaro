@@ -2,22 +2,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Vidaro: Where Video Meets Insight</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
-<body class="bg-gray-100 text-gray-900">
-  <header class="bg-white shadow-md p-4 flex items-center justify-between">
+<body class="bg-gray-50 text-gray-900">
+  <header class="bg-white shadow p-4 flex justify-between items-center">
     <div class="flex items-center gap-2">
-      <img src="favicon.ico" alt="Vidaro Logo" class="w-8 h-8" />
-      <h1 class="text-xl font-bold text-indigo-700">Vidaro</h1>
+      <img src="favicon.ico" alt="Vidaro Logo" class="h-8 w-8" />
+      <h1 class="text-xl font-bold text-indigo-600">Vidaro</h1>
     </div>
-    <div id="authState" class="text-sm text-gray-600">Firebase Auth, Firestore, and UI are now active.</div>
+    <div id="authState" class="text-sm text-gray-600">Logged in as: <span id="userEmail"></span></div>
   </header>
-  <main class="max-w-4xl mx-auto p-6">
-    <p>This is the fully working MVP build of Vidaro: video reactions, folder system, and PDF prep included.</p>
+  <main class="max-w-5xl mx-auto p-6">
+    <section id="videoSection" class="mb-6">
+      <input id="videoUrl" type="text" placeholder="Paste YouTube or video link here" class="w-full p-2 border rounded" />
+      <button onclick="loadVideo()" class="mt-2 bg-indigo-600 text-white px-4 py-2 rounded">Load Video</button>
+      <div id="videoContainer" class="mt-4"></div>
+    </section>
+    <section id="reactionControls" class="mb-6">
+      <h2 class="font-bold text-lg mb-2">Reactions</h2>
+      <div id="reactionGroups" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Reaction groups will load here -->
+      </div>
+    </section>
+    <section id="folderControls" class="mb-6">
+      <h2 class="font-bold text-lg mb-2">Folder</h2>
+      <select id="folderSelect" class="p-2 border rounded"></select>
+      <button onclick="createNewFolder()" class="ml-2 bg-green-600 text-white px-3 py-1 rounded">New Folder</button>
+    </section>
+    <section id="shareExport" class="mt-8">
+      <button onclick="generatePDF()" class="bg-blue-600 text-white px-4 py-2 rounded">Export PDF</button>
+      <button onclick="copyShareLink()" class="ml-4 bg-gray-600 text-white px-4 py-2 rounded">Share Review Link</button>
+    </section>
   </main>
+  <script src="app.js" type="module"></script>
 </body>
 </html>

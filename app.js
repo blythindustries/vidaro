@@ -1,0 +1,1 @@
+// Full Firebase + Firestore + PDF logic will be injected here
