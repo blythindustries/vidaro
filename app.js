@@ -1,1 +1,1 @@
-// Final working app.js script with Firebase Auth, Firestore logic, video, reactions, folders, and export
+// REAL WORKING app.js for Vidaro MVP with Firebase Auth, Firestore, video logic, reactions
