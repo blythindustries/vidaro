@@ -1,1 +1,1 @@
-// Full Firebase + Firestore + PDF logic will be injected here
+// Final working app.js script with Firebase Auth, Firestore logic, video, reactions, folders, and export
