@@ -2,42 +2,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vidaro: Where Video Meets Insight</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
-<body class="bg-gray-50 text-gray-900">
-  <header class="bg-white shadow p-4 flex justify-between items-center">
-    <div class="flex items-center gap-2">
-      <img src="favicon.ico" alt="Vidaro Logo" class="h-8 w-8" />
-      <h1 class="text-xl font-bold text-indigo-600">Vidaro</h1>
-    </div>
-    <div id="authState" class="text-sm text-gray-600">Logged in as: <span id="userEmail"></span></div>
-  </header>
-  <main class="max-w-5xl mx-auto p-6">
-    <section id="videoSection" class="mb-6">
-      <input id="videoUrl" type="text" placeholder="Paste YouTube or video link here" class="w-full p-2 border rounded" />
-      <button onclick="loadVideo()" class="mt-2 bg-indigo-600 text-white px-4 py-2 rounded">Load Video</button>
-      <div id="videoContainer" class="mt-4"></div>
-    </section>
-    <section id="reactionControls" class="mb-6">
-      <h2 class="font-bold text-lg mb-2">Reactions</h2>
-      <div id="reactionGroups" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Reaction groups will load here -->
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+  <div class="max-w-4xl mx-auto py-6 px-4">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold text-indigo-700">Vidaro: Where Video Meets Insight</h1>
+      <p id="userEmail" class="text-sm mt-2">Checking login...</p>
+    </header>
+
+    <section class="mb-4">
+      <div class="flex items-center gap-2 mb-2">
+        <input id="videoUrl" class="flex-1 border rounded p-2" placeholder="Paste video URL here (YouTube or MP4)">
+        <button onclick="loadVideo()" class="bg-indigo-600 text-white px-4 py-2 rounded">Load Video</button>
+      </div>
+      <div id="videoContainer" class="w-full bg-white rounded shadow p-2 h-64 flex items-center justify-center">
+        <span class="text-gray-400">No video loaded</span>
       </div>
     </section>
-    <section id="folderControls" class="mb-6">
-      <h2 class="font-bold text-lg mb-2">Folder</h2>
-      <select id="folderSelect" class="p-2 border rounded"></select>
-      <button onclick="createNewFolder()" class="ml-2 bg-green-600 text-white px-3 py-1 rounded">New Folder</button>
+
+    <section class="mb-4">
+      <div class="flex items-center gap-2 mb-2">
+        <label class="font-medium">Folder:</label>
+        <select id="folderSelect" class="border rounded p-2"></select>
+        <button onclick="createNewFolder()" class="text-sm text-blue-600 underline">+ New Folder</button>
+      </div>
     </section>
-    <section id="shareExport" class="mt-8">
-      <button onclick="generatePDF()" class="bg-blue-600 text-white px-4 py-2 rounded">Export PDF</button>
-      <button onclick="copyShareLink()" class="ml-4 bg-gray-600 text-white px-4 py-2 rounded">Share Review Link</button>
+
+    <section class="mb-6">
+      <h2 class="text-xl font-semibold mb-3 text-indigo-700">Reactions</h2>
+      <div id="reactionGroups" class="grid md:grid-cols-3 gap-4"></div>
     </section>
-  </main>
-  <script src="app.js" type="module"></script>
+
+    <section class="flex flex-wrap gap-4 mt-6">
+      <button onclick="copyShareLink()" class="bg-green-600 text-white px-4 py-2 rounded">Copy Share Link</button>
+      <button onclick="generatePDF()" class="bg-yellow-500 text-white px-4 py-2 rounded">Generate PDF</button>
+    </section>
+  </div>
+
+  <script type="module" src="./app.js"></script>
 </body>
 </html>
