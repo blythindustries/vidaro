@@ -1,10 +1,16 @@
-// REAL WORKING app.js for Vidaro MVP
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+// ✅ Full working app.js with Firebase Auth, Firestore, Folder and Reaction logic
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import {
+  getAuth, onAuthStateChanged, signInWithEmailAndPassword,
+  createUserWithEmailAndPassword, signOut
+} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import {
+  getFirestore, collection, addDoc, getDocs, doc, setDoc,
+  updateDoc, deleteDoc, query, where
+} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-// Firebase config
+// Your Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyCaiqQnXJHjxE16WvEGjxbFQJZQnPVASVk",
   authDomain: "vidaro-e9b55.firebaseapp.com",
@@ -16,152 +22,167 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const db = getFirestore();
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// --- UI Elements ---
+const authSection = document.getElementById("authSection");
+const folderSelect = document.getElementById("folderSelect");
+const reactionGroupsContainer = document.getElementById("reactionGroups");
 
 let currentUser = null;
-let currentFolder = null;
+let currentFolderId = null;
 
-onAuthStateChanged(auth, async (user) => {
+// --- Authentication ---
+function updateAuthUI(user) {
+  authSection.innerHTML = "";
   if (user) {
-    currentUser = user;
-    document.getElementById("userEmail").textContent = user.email;
-    await setupDefaultFolder();
-    await loadFolders();
-    renderReactions();
+    const logoutBtn = document.createElement("button");
+    logoutBtn.textContent = "Logout";
+    logoutBtn.className = "bg-red-500 text-white px-3 py-1 rounded";
+    logoutBtn.onclick = () => signOut(auth);
+    authSection.append(`Logged in as ${user.email} `, logoutBtn);
   } else {
-    document.getElementById("userEmail").textContent = "Not logged in";
+    const email = prompt("Enter email:");
+    const password = prompt("Enter password:");
+    if (email && password) {
+      signInWithEmailAndPassword(auth, email, password)
+        .catch(() => {
+          createUserWithEmailAndPassword(auth, email, password).catch(alert);
+        });
+    }
+  }
+}
+
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  if (user) {
+    updateAuthUI(user);
+    loadFolders();
+  } else {
+    updateAuthUI(null);
   }
 });
 
-async function setupDefaultFolder() {
-  const folderSelect = document.getElementById("folderSelect");
-  const folderCol = collection(db, "users", currentUser.uid, "folders");
-  const snap = await getDocs(folderCol);
-  if (snap.empty) {
-    await setDoc(doc(folderCol, "Default"), { name: "Default" });
-  }
-  currentFolder = "Default";
-}
-
+// --- Folder Logic ---
 async function loadFolders() {
-  const folderSelect = document.getElementById("folderSelect");
   folderSelect.innerHTML = "";
-  const folderCol = collection(db, "users", currentUser.uid, "folders");
-  const snap = await getDocs(folderCol);
-  snap.forEach(doc => {
+  const q = query(collection(db, "folders"), where("uid", "==", currentUser.uid));
+  const snap = await getDocs(q);
+  snap.forEach((docItem) => {
     const opt = document.createElement("option");
-    opt.value = doc.id;
-    opt.textContent = doc.data().name;
+    opt.value = docItem.id;
+    opt.textContent = docItem.data().name;
     folderSelect.appendChild(opt);
   });
-  folderSelect.value = currentFolder;
-  folderSelect.onchange = (e) => {
-    currentFolder = e.target.value;
-  };
+  if (folderSelect.options.length > 0) {
+    folderSelect.selectedIndex = 0;
+    currentFolderId = folderSelect.value;
+    loadReactions();
+  }
 }
 
-window.createNewFolder = async function () {
-  const name = prompt("Enter new folder name:");
+async function createFolder() {
+  const name = prompt("Folder name:");
   if (!name) return;
-  const id = name.replace(/\s+/g, "-").toLowerCase();
-  await setDoc(doc(db, "users", currentUser.uid, "folders", id), { name });
-  currentFolder = id;
-  await loadFolders();
-};
-
-// Reactions
-const defaultReactions = [
-  { category: "Clarity", text: "Needs Improvement", color: "#f87171" },
-  { category: "Clarity", text: "Good", color: "#facc15" },
-  { category: "Clarity", text: "Excellent", color: "#4ade80" }
-];
-
-function renderReactions() {
-  const container = document.getElementById("reactionGroups");
-  container.innerHTML = "";
-  const grouped = {};
-  defaultReactions.forEach(r => {
-    if (!grouped[r.category]) grouped[r.category] = [];
-    grouped[r.category].push(r);
+  const ref = await addDoc(collection(db, "folders"), {
+    name,
+    uid: currentUser.uid
   });
+  loadFolders();
+}
 
-  Object.keys(grouped).forEach(category => {
-    const col = document.createElement("div");
-    col.innerHTML = `<h3 class="font-semibold mb-2">${category}</h3>`;
-    grouped[category].forEach(r => {
-      const btn = document.createElement("button");
-      btn.textContent = r.text;
-      btn.className = "block w-full mb-1 rounded px-2 py-1 text-white";
-      btn.style.backgroundColor = r.color;
-      btn.onclick = () => handleReaction(r);
-      col.appendChild(btn);
-    });
-    container.appendChild(col);
+async function renameFolder() {
+  const newName = prompt("New folder name:");
+  if (!newName) return;
+  const docRef = doc(db, "folders", currentFolderId);
+  await updateDoc(docRef, { name: newName });
+  loadFolders();
+}
+
+async function deleteFolder() {
+  if (!confirm("Delete this folder?")) return;
+  await deleteDoc(doc(db, "folders", currentFolderId));
+  loadFolders();
+}
+
+// --- Reaction Group Logic ---
+async function loadReactions() {
+  reactionGroupsContainer.innerHTML = "";
+  const q = query(collection(db, "reactions"), where("uid", "==", currentUser.uid), where("folderId", "==", currentFolderId));
+  const snap = await getDocs(q);
+  snap.forEach((docItem) => {
+    const data = docItem.data();
+    addReactionGroupUI(data, docItem.id);
   });
 }
 
-function handleReaction(reaction) {
-  const time = new Date().toLocaleTimeString();
-  showBubble(reaction.text, reaction.color);
-  saveReactionToFirestore(reaction, time);
-}
+function addReactionGroupUI(data = null, docId = null) {
+  const groupDiv = document.createElement("div");
+  groupDiv.className = "bg-white p-4 rounded shadow";
 
-function showBubble(text, color) {
-  const videoContainer = document.getElementById("videoContainer");
-  const bubble = document.createElement("div");
-  bubble.textContent = text;
-  bubble.className = "absolute px-4 py-2 rounded-full text-white font-semibold shadow-lg transition-opacity duration-500";
-  bubble.style.backgroundColor = color;
-  bubble.style.top = "50%";
-  bubble.style.left = "50%";
-  bubble.style.transform = "translate(-50%, -50%)";
-  videoContainer.appendChild(bubble);
-  setTimeout(() => bubble.remove(), 5000);
-}
+  const title = document.createElement("input");
+  title.value = data?.name || "New Group";
+  title.className = "font-bold text-lg mb-2 block w-full";
 
-async function saveReactionToFirestore(reaction, time) {
-  const folderPath = collection(db, "users", currentUser.uid, "folders", currentFolder, "reactions");
-  await addDoc(folderPath, {
-    video: document.getElementById("videoUrl").value,
-    timestamp: time,
-    text: reaction.text,
-    color: reaction.color,
-    category: reaction.category,
-    username: currentUser.email
+  const levelsDiv = document.createElement("div");
+  (data?.levels || []).forEach((lvl) => {
+    const btn = document.createElement("button");
+    btn.textContent = lvl.label;
+    btn.style.backgroundColor = lvl.color;
+    btn.className = "text-white px-2 py-1 m-1 rounded";
+    levelsDiv.appendChild(btn);
   });
+
+  const saveBtn = document.createElement("button");
+  saveBtn.textContent = "Save";
+  saveBtn.className = "bg-blue-600 text-white px-3 py-1 mt-2 rounded";
+  saveBtn.onclick = async () => {
+    const levels = [...levelsDiv.querySelectorAll("button")].map((btn) => ({
+      label: btn.textContent,
+      color: btn.style.backgroundColor,
+    }));
+    const payload = {
+      name: title.value,
+      levels,
+      uid: currentUser.uid,
+      folderId: currentFolderId,
+    };
+    if (docId) {
+      await setDoc(doc(db, "reactions", docId), payload);
+    } else {
+      await addDoc(collection(db, "reactions"), payload);
+    }
+    loadReactions();
+  };
+
+  groupDiv.append(title, levelsDiv, saveBtn);
+  reactionGroupsContainer.appendChild(groupDiv);
 }
 
+function addReactionGroup() {
+  addReactionGroupUI();
+}
+
+window.createFolder = createFolder;
+window.renameFolder = renameFolder;
+window.deleteFolder = deleteFolder;
+window.addReactionGroup = addReactionGroup;
 window.loadVideo = function () {
-  const url = document.getElementById("videoUrl").value.trim();
+  const url = document.getElementById("videoUrl").value;
   const container = document.getElementById("videoContainer");
   container.innerHTML = "";
-  let embed;
   if (url.includes("youtube.com") || url.includes("youtu.be")) {
-    const videoId = url.includes("v=")
-      ? new URL(url).searchParams.get("v")
-      : url.split("/").pop();
-    embed = document.createElement("iframe");
-    embed.src = `https://www.youtube.com/embed/${videoId}`;
-    embed.className = "w-full h-full";
-    embed.allowFullscreen = true;
-  } else if (url.endsWith(".mp4")) {
-    embed = document.createElement("video");
-    embed.src = url;
-    embed.controls = true;
-    embed.className = "w-full h-full";
+    const videoId = url.split("v=")[1] || url.split("/").pop();
+    const iframe = document.createElement("iframe");
+    iframe.src = `https://www.youtube.com/embed/${videoId}`;
+    iframe.className = "w-full h-full";
+    container.appendChild(iframe);
   } else {
-    container.textContent = "Unsupported video type.";
-    return;
+    const video = document.createElement("video");
+    video.src = url;
+    video.controls = true;
+    video.className = "w-full h-full";
+    container.appendChild(video);
   }
-  container.appendChild(embed);
-};
-
-window.copyShareLink = function () {
-  navigator.clipboard.writeText(window.location.href);
-  alert("Link copied to clipboard!");
-};
-
-window.generatePDF = function () {
-  alert("PDF export logic would run here.");
 };
