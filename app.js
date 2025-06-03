@@ -18,6 +18,19 @@ const db = getFirestore();
 
 const authSection = document.getElementById("authSection");
 
+function showMessage(msg, isError = false) {
+  let msgBox = document.getElementById("messageBox");
+  if (!msgBox) {
+    msgBox = document.createElement("div");
+    msgBox.id = "messageBox";
+    msgBox.className = "my-2 p-2 rounded text-sm";
+    authSection.parentNode.insertBefore(msgBox, authSection.nextSibling);
+  }
+  msgBox.textContent = msg;
+  msgBox.className = `my-2 p-2 rounded text-sm ${isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+  setTimeout(() => msgBox.remove(), 5000);
+}
+
 function renderAuthButtons(user) {
   authSection.innerHTML = "";
   if (user) {
@@ -38,7 +51,16 @@ function renderAuthButtons(user) {
       try {
         await signInWithEmailAndPassword(auth, email, password);
       } catch (e) {
-        await createUserWithEmailAndPassword(auth, email, password);
+        if (e.code === "auth/user-not-found") {
+          try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            showMessage("Account created and signed in!");
+          } catch (err) {
+            showMessage("Sign up failed: " + err.message, true);
+          }
+        } else {
+          showMessage("Login failed: " + e.message, true);
+        }
       }
     };
     authSection.appendChild(loginBtn);
@@ -117,7 +139,7 @@ function loadVideo() {
     embed.src = url;
     embed.controls = true;
   }
-  embed.className = "w-full h-full";
+  embed.className = "w-full aspect-video"; // 16:9 ratio
   container.appendChild(embed);
 }
 
