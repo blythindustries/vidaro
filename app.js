@@ -1,5 +1,4 @@
 
-// Firebase setup and imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, getDocs, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -28,7 +27,7 @@ function showMessage(msg, isError = false) {
   }
   msgBox.textContent = msg;
   msgBox.className = `my-2 p-2 rounded text-sm w-full text-center ${isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
-  setTimeout(() => msgBox.remove(), 5000);
+  setTimeout(() => msgBox.remove(), 6000);
 }
 
 function renderAuthButtons(user) {
@@ -58,10 +57,10 @@ function renderAuthButtons(user) {
             await createUserWithEmailAndPassword(auth, email, password);
             showMessage("Account created and signed in!");
           } catch (err) {
-            showMessage("Sign up failed: " + err.message, true);
+            showMessage("Could not create account. Please try again.", true);
           }
         } else {
-          showMessage("Login failed: " + e.message, true);
+          showMessage("Login failed. Please check your email and password.", true);
         }
       }
     };
@@ -133,14 +132,14 @@ function loadVideo() {
   wrapper.style.width = "100%";
   wrapper.style.maxWidth = "960px";
   wrapper.style.margin = "0 auto";
-  wrapper.style.paddingTop = "56.25%"; // 16:9 aspect ratio
+  wrapper.style.paddingTop = "56.25%"; // 16:9
   wrapper.className = "relative mb-6";
 
   let embed;
   if (url.includes("youtube.com") || url.includes("youtu.be")) {
     const videoId = url.includes("youtu.be") ? url.split("/").pop() : new URL(url).searchParams.get("v");
     embed = document.createElement("iframe");
-    embed.src = `https://www.youtube.com/embed/${videoId}`;
+    embed.src = `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`;
     embed.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
   } else if (url.includes("vimeo.com")) {
     const id = url.split("/").pop();
