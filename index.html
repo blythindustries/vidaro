@@ -45,15 +45,31 @@
       padding: 0.5em;
       margin: 0.2em;
     }
+    .flex-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .section {
+      max-width: 960px;
+      margin: 0 auto 1em auto;
+    }
+    .folder, .reaction-group {
+      padding: 1em;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>Vidaro</h1>
     <div id="authControls">
-      <button onclick="toggleForm('loginForm')">Log In</button>
-      <button onclick="toggleForm('signupForm')">Sign Up</button>
-      <button onclick="logout()">Log Out</button>
+      <button id="loginBtn" onclick="toggleForm('loginForm')">Log In</button>
+      <button id="signupBtn" onclick="toggleForm('signupForm')">Sign Up</button>
+      <button id="logoutBtn" class="hidden" onclick="logout()">Log Out</button>
     </div>
   </header>
 
@@ -70,12 +86,29 @@
     </div>
   </div>
 
-  <div>
+  <div class="section">
     <input type="text" id="videoUrl" placeholder="Paste video URL here" style="width: 60%;" />
     <button onclick="loadVideo()">Load Video</button>
   </div>
 
   <div id="videoContainer"></div>
+
+  <div class="section folder">
+    <h3>Folders</h3>
+    <div class="flex-row" id="folderList">
+      <!-- Folders will go here -->
+    </div>
+    <input type="text" id="newFolderName" placeholder="New folder name" />
+    <button onclick="createFolder()">Create Folder</button>
+  </div>
+
+  <div class="section reaction-group">
+    <h3>Reactions</h3>
+    <div id="reactionGroups">
+      <!-- Reaction groups and buttons will go here -->
+    </div>
+    <button onclick="addReactionGroup()">Add Reaction Group</button>
+  </div>
 
   <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
@@ -116,13 +149,10 @@
     }
 
     auth.onAuthStateChanged(user => {
-      if (user) {
-        document.getElementById("authControls").style.display = "none";
-      } else {
-        document.getElementById("authControls").style.display = "block";
-        document.getElementById("loginForm").classList.add("hidden");
-        document.getElementById("signupForm").classList.add("hidden");
-      }
+      const loggedIn = !!user;
+      document.getElementById("loginBtn").classList.toggle("hidden", loggedIn);
+      document.getElementById("signupBtn").classList.toggle("hidden", loggedIn);
+      document.getElementById("logoutBtn").classList.toggle("hidden", !loggedIn);
     });
   </script>
   <script src="app.js"></script>
