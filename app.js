@@ -23,11 +23,11 @@ function showMessage(msg, isError = false) {
   if (!msgBox) {
     msgBox = document.createElement("div");
     msgBox.id = "messageBox";
-    msgBox.className = "my-2 p-2 rounded text-sm";
+    msgBox.className = "my-2 p-2 rounded text-sm w-full text-center";
     authSection.appendChild(msgBox);
   }
   msgBox.textContent = msg;
-  msgBox.className = `my-2 p-2 rounded text-sm ${isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+  msgBox.className = `my-2 p-2 rounded text-sm w-full text-center ${isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
   setTimeout(() => msgBox.remove(), 5000);
 }
 
@@ -40,7 +40,7 @@ function renderAuthButtons(user) {
     welcome.textContent = user.email;
     const logoutBtn = document.createElement("button");
     logoutBtn.textContent = "Logout";
-    logoutBtn.className = "bg-red-600 text-white px-3 py-1 rounded";
+    logoutBtn.className = "bg-red-600 text-white px-3 py-1 rounded ml-2";
     logoutBtn.onclick = () => signOut(auth);
     authSection.append(welcome, logoutBtn);
   } else {
@@ -131,6 +131,8 @@ function loadVideo() {
   const wrapper = document.createElement("div");
   wrapper.style.position = "relative";
   wrapper.style.width = "100%";
+  wrapper.style.maxWidth = "960px";
+  wrapper.style.margin = "0 auto";
   wrapper.style.paddingTop = "56.25%"; // 16:9 aspect ratio
   wrapper.className = "relative mb-6";
 
