@@ -1,0 +1,102 @@
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f4f6fa;
+  color: #333;
+}
+
+header {
+  background: #3056d3;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+#authSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem;
+}
+
+.auth-form {
+  margin: 0.5rem;
+}
+
+.auth-form input {
+  margin: 0.2rem;
+  padding: 0.4rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+button {
+  background: #3056d3;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0.3rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #244abf;
+}
+
+.hidden {
+  display: none;
+}
+
+.video-controls {
+  text-align: center;
+  margin: 1rem;
+}
+
+.video-container {
+  width: 90%;
+  max-width: 800px;
+  margin: auto;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  position: relative;
+}
+
+.reaction-bubble {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ffcc00;
+  padding: 0.5rem;
+  border-radius: 10px;
+  font-weight: bold;
+  animation: fadeOut 5s forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+#reactionSection, #folderSection {
+  margin: 1rem auto;
+  width: 90%;
+  max-width: 800px;
+}
+
+#reactionGroups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.reaction-group {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 8px;
+  background: white;
+  flex: 1 1 200px;
+}

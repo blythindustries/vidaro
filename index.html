@@ -8,7 +8,9 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Vidaro: Where Video Meets Insight</h1>
+  <header>
+    <h1>Vidaro: Where Video Meets Insight</h1>
+  </header>
 
   <div id="authSection">
     <div id="messageBox" class="hidden"></div>
@@ -16,46 +18,40 @@
     <button id="signupBtn" onclick="toggleForm('signupForm')">Sign Up</button>
     <button id="logoutBtn" class="hidden" onclick="logout()">Log Out</button>
 
-    <div id="loginForm" class="hidden">
+    <div id="loginForm" class="auth-form hidden">
       <input type="email" id="loginEmail" placeholder="Email">
       <input type="password" id="loginPassword" placeholder="Password">
       <button onclick="login()">Login</button>
     </div>
-    <div id="signupForm" class="hidden">
+
+    <div id="signupForm" class="auth-form hidden">
       <input type="email" id="signupEmail" placeholder="Email">
       <input type="password" id="signupPassword" placeholder="Password">
       <button onclick="signup()">Sign Up</button>
     </div>
   </div>
 
-  <hr>
-
-  <div>
+  <section class="video-controls">
     <input id="videoUrl" placeholder="Enter YouTube, Vimeo, or video link">
     <button onclick="loadVideo()">Load Video</button>
-  </div>
+  </section>
 
   <div id="videoContainer" class="video-container"></div>
   <div id="reactionBubble" class="reaction-bubble hidden"></div>
 
-  <hr>
-
-  <div id="reactionSection">
+  <section id="reactionSection">
     <h3>Reaction Groups</h3>
     <button onclick="addReactionGroup()">Add Reaction Group</button>
-    <div id="reactionGroups"></div>
-  </div>
+    <div id="reactionGroups" class="reaction-groups"></div>
+  </section>
 
-  <hr>
-
-  <div id="folderSection">
+  <section id="folderSection">
     <h3>Folders</h3>
     <select id="folderDropdown"></select>
     <input id="newFolderName" placeholder="New folder name">
     <button onclick="createFolder()">Create</button>
     <button onclick="deleteCurrentFolder()">Delete Selected Folder</button>
-    <div id="folderList"></div>
-  </div>
+  </section>
 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
