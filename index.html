@@ -4,62 +4,77 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vidaro: Where Video Meets Insight</title>
+  <title>Vidaro</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
       padding: 20px;
-      background: #f9f9f9;
-      color: #333;
+      background-color: #f8f8f8;
     }
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+    .hidden {
+      display: none;
+    }
+    .auth-box {
+      margin: 1em 0;
+    }
+    #messageBox {
+      background: #ffdddd;
+      color: #a00;
+      padding: 10px;
+      border-radius: 4px;
       margin-bottom: 1em;
     }
     #videoContainer {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      aspect-ratio: 16/9;
       background: #000;
-      max-width: 960px;
-      margin: 0 auto 1em auto;
-      aspect-ratio: 16 / 9;
+      margin-bottom: 1em;
     }
-    #videoContainer iframe,
-    #videoContainer video {
+    iframe, video {
       width: 100%;
       height: 100%;
       object-fit: contain;
       border: none;
     }
-    .auth-section {
+    .section {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
       margin-bottom: 1em;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
-    .hidden {
-      display: none;
-    }
-    input, button {
-      padding: 0.5em;
-      margin: 0.2em;
-    }
-    .flex-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+    .reaction-set {
       margin-top: 10px;
     }
-    .section {
-      max-width: 960px;
-      margin: 0 auto 1em auto;
+    button {
+      margin: 5px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
-    .folder, .reaction-group {
-      padding: 1em;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+    button:hover {
+      opacity: 0.9;
+    }
+    .danger {
+      background: #e74c3c;
+      color: white;
+    }
+    .primary {
+      background: #3498db;
+      color: white;
+    }
+    .success {
+      background: #2ecc71;
+      color: white;
+    }
+    .warning {
+      background: #f39c12;
+      color: white;
     }
   </style>
 </head>
@@ -73,7 +88,9 @@
     </div>
   </header>
 
-  <div class="auth-section">
+  <div id="messageBox" class="hidden"></div>
+
+  <div class="auth-box">
     <div id="loginForm" class="hidden">
       <input type="email" id="loginEmail" placeholder="Email" />
       <input type="password" id="loginPassword" placeholder="Password" />
@@ -87,74 +104,28 @@
   </div>
 
   <div class="section">
-    <input type="text" id="videoUrl" placeholder="Paste video URL here" style="width: 60%;" />
+    <input type="text" id="videoUrl" placeholder="Paste YouTube or video link here" style="width: 60%;" />
     <button onclick="loadVideo()">Load Video</button>
   </div>
 
   <div id="videoContainer"></div>
 
-  <div class="section folder">
+  <div class="section">
     <h3>Folders</h3>
-    <div class="flex-row" id="folderList">
-      <!-- Folders will go here -->
-    </div>
     <input type="text" id="newFolderName" placeholder="New folder name" />
-    <button onclick="createFolder()">Create Folder</button>
+    <button onclick="createFolder()" class="primary">Create Folder</button>
+    <div id="folderList" style="margin-top: 10px;"></div>
   </div>
 
-  <div class="section reaction-group">
+  <div class="section">
     <h3>Reactions</h3>
-    <div id="reactionGroups">
-      <!-- Reaction groups and buttons will go here -->
-    </div>
-    <button onclick="addReactionGroup()">Add Reaction Group</button>
+    <button onclick="addReactionGroup()" class="success">+ Add Reaction Group</button>
+    <div id="reactionGroups"></div>
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyCaiqQnXJHjxE16WvEGjxbFQJZQnPVASVk",
-      authDomain: "vidaro-e9b55.firebaseapp.com",
-      projectId: "vidaro-e9b55",
-      storageBucket: "vidaro-e9b55.appspot.com",
-      messagingSenderId: "1048856992681",
-      appId: "1:1048856992681:web:5c05859353365caca002b8"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    function toggleForm(formId) {
-      document.getElementById("loginForm").classList.add("hidden");
-      document.getElementById("signupForm").classList.add("hidden");
-      document.getElementById(formId).classList.remove("hidden");
-    }
-
-    function login() {
-      const email = document.getElementById("loginEmail").value;
-      const password = document.getElementById("loginPassword").value;
-      auth.signInWithEmailAndPassword(email, password)
-        .catch(error => alert("Login failed: " + error.message));
-    }
-
-    function signup() {
-      const email = document.getElementById("signupEmail").value;
-      const password = document.getElementById("signupPassword").value;
-      auth.createUserWithEmailAndPassword(email, password)
-        .catch(error => alert("Sign up failed: " + error.message));
-    }
-
-    function logout() {
-      auth.signOut().catch(error => alert("Logout failed: " + error.message));
-    }
-
-    auth.onAuthStateChanged(user => {
-      const loggedIn = !!user;
-      document.getElementById("loginBtn").classList.toggle("hidden", loggedIn);
-      document.getElementById("signupBtn").classList.toggle("hidden", loggedIn);
-      document.getElementById("logoutBtn").classList.toggle("hidden", !loggedIn);
-    });
-  </script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
