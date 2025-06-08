@@ -10,52 +10,38 @@
 <body>
   <header>
     <h1>Vidaro: Where Video Meets Insight</h1>
+    <div id="auth-controls">
+      <button id="loginBtn">Login</button>
+      <button id="signupBtn">Sign Up</button>
+      <button id="logoutBtn" style="display:none;">Logout</button>
+    </div>
   </header>
 
-  <div id="authSection">
-    <div id="messageBox" class="hidden"></div>
-    <button id="loginBtn" onclick="toggleForm('loginForm')">Log In</button>
-    <button id="signupBtn" onclick="toggleForm('signupForm')">Sign Up</button>
-    <button id="logoutBtn" class="hidden" onclick="logout()">Log Out</button>
+  <main>
+    <section id="video-container">
+      <input type="text" id="videoURL" placeholder="Paste YouTube, Vimeo, or file link" />
+      <button id="loadVideo">Load Video</button>
+      <div id="playerWrapper">
+        <iframe id="videoPlayer" allowfullscreen></iframe>
+      </div>
+    </section>
 
-    <div id="loginForm" class="auth-form hidden">
-      <input type="email" id="loginEmail" placeholder="Email">
-      <input type="password" id="loginPassword" placeholder="Password">
-      <button onclick="login()">Login</button>
-    </div>
+    <section id="reaction-controls">
+      <h2>Reactions</h2>
+      <div id="reactionGroupArea"></div>
+      <button id="addReactionGroup">+ Add Reaction Group</button>
+    </section>
 
-    <div id="signupForm" class="auth-form hidden">
-      <input type="email" id="signupEmail" placeholder="Email">
-      <input type="password" id="signupPassword" placeholder="Password">
-      <button onclick="signup()">Sign Up</button>
-    </div>
-  </div>
+    <section id="folder-controls">
+      <h2>Folders</h2>
+      <div id="folderList"></div>
+      <input type="text" id="newFolderName" placeholder="New folder name" />
+      <button id="createFolder">+ Create Folder</button>
+    </section>
 
-  <section class="video-controls">
-    <input id="videoUrl" placeholder="Enter YouTube, Vimeo, or video link">
-    <button onclick="loadVideo()">Load Video</button>
-  </section>
+    <div id="reactionBubbleContainer"></div>
+  </main>
 
-  <div id="videoContainer" class="video-container"></div>
-  <div id="reactionBubble" class="reaction-bubble hidden"></div>
-
-  <section id="reactionSection">
-    <h3>Reaction Groups</h3>
-    <button onclick="addReactionGroup()">Add Reaction Group</button>
-    <div id="reactionGroups" class="reaction-groups"></div>
-  </section>
-
-  <section id="folderSection">
-    <h3>Folders</h3>
-    <select id="folderDropdown"></select>
-    <input id="newFolderName" placeholder="New folder name">
-    <button onclick="createFolder()">Create</button>
-    <button onclick="deleteCurrentFolder()">Delete Selected Folder</button>
-  </section>
-
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
