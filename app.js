@@ -104,6 +104,9 @@ onAuthStateChanged(auth, (user) => {
     signupBtn.style.display = "none";
     logoutBtn.style.display = "inline-block";
     authModal.classList.add("hidden");
+    emailInput.value = "";
+    passInput.value = "";
+    authError.textContent = "";
   } else {
     loginBtn.style.display = "inline-block";
     signupBtn.style.display = "inline-block";
