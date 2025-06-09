@@ -76,6 +76,10 @@ authSubmit.onclick = async () => {
     emailInput.value = "";
     passInput.value = "";
     authError.textContent = "";
+    authModal.classList.add("hidden");
+    emailInput.value = "";
+    passInput.value = "";
+    authError.textContent = "";
   } catch (error) {
     switch (error.code) {
       case "auth/user-not-found":
