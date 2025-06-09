@@ -1,7 +1,87 @@
-
 body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f7f7f7;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f8f8f8;
+}
+
+.header {
+  background: #111;
+  color: white;
+  padding: 1em;
+  text-align: center;
+}
+
+#auth-buttons {
+  margin-top: 0.5em;
+}
+
+button {
+  padding: 0.5em 1em;
+  margin: 0.3em;
+  border: none;
+  background-color: #1976d2;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.main {
+  padding: 1em;
+}
+
+.video-wrapper {
+  text-align: center;
+  margin-top: 1em;
+}
+
+.video-section input[type="text"] {
+  width: 60%;
+  padding: 0.5em;
+  margin-right: 0.5em;
+}
+
+.reaction-controls,
+.folder-controls {
+  margin-top: 1em;
+  text-align: center;
+}
+
+#reaction-bubble {
+  position: absolute;
+  top: 10%;
+  left: 70%;
+  padding: 0.5em 1em;
+  background: #ffeb3b;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.bubble.hidden {
+  display: none;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 2em;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
+}
+
+.error-message {
+  color: red;
+  margin-top: 1em;
 }

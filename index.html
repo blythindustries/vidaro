@@ -1,14 +1,53 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Vidaro</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vidaro</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="app.js" defer></script>
 </head>
 <body>
-    <div id="app"></div>
-    <script src="app.js"></script>
+  <div class="header">
+    <h1>Vidaro: Where Video Meets Insight</h1>
+    <div id="auth-buttons">
+      <button id="login-btn">Log In</button>
+      <button id="signup-btn">Sign Up</button>
+      <button id="logout-btn" style="display: none;">Log Out</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="video-section">
+      <input id="video-url" type="text" placeholder="Paste YouTube or video file URL..." />
+      <button id="load-video">Load Video</button>
+      <div class="video-wrapper">
+        <iframe id="video-frame" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="reaction-controls">
+      <div id="reaction-group-container"></div>
+      <button id="add-reaction-group">+ Reaction Group</button>
+    </div>
+
+    <div class="folder-controls">
+      <select id="folder-select"></select>
+      <button id="add-folder">+ Folder</button>
+    </div>
+  </div>
+
+  <div id="reaction-bubble" class="bubble hidden"></div>
+
+  <div id="auth-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2 id="auth-modal-title">Log In</h2>
+      <input id="email" type="email" placeholder="Email" />
+      <input id="password" type="password" placeholder="Password" />
+      <button id="auth-submit">Submit</button>
+      <button id="auth-cancel">Cancel</button>
+      <p id="auth-error" class="error-message"></p>
+    </div>
+  </div>
 </body>
 </html>
