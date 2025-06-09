@@ -70,13 +70,6 @@ authSubmit.onclick = async () => {
       await createUserWithEmailAndPassword(auth, email, password);
     }
     authModal.classList.add("hidden");
-    loginBtn.style.display = "none";
-    signupBtn.style.display = "none";
-    logoutBtn.style.display = "inline-block";
-    emailInput.value = "";
-    passInput.value = "";
-    authError.textContent = "";
-    authModal.classList.add("hidden");
     emailInput.value = "";
     passInput.value = "";
     authError.textContent = "";
