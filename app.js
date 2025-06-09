@@ -1,78 +1,66 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+// Firebase SDK imports
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  updateDoc,
-  arrayUnion
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  signOut,
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-// Firebase config
+// TODO: Replace with your actual config
 const firebaseConfig = {
-  apiKey: "AIzaSyDvJqIfGCy-xxxxx", // use your values here
-  authDomain: "vidaro-e9b55.firebaseapp.com",
-  projectId: "vidaro-e9b55",
-  storageBucket: "vidaro-e9b55.appspot.com",
-  messagingSenderId: "245885912071",
-  appId: "1:245885912071:web:xxxx"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID",
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
-// Elements
+// DOM Elements
 const loginBtn = document.getElementById("login-btn");
 const signupBtn = document.getElementById("signup-btn");
 const logoutBtn = document.getElementById("logout-btn");
 const authModal = document.getElementById("auth-modal");
-const authTitle = document.getElementById("auth-modal-title");
+const authModalTitle = document.getElementById("auth-modal-title");
 const authSubmit = document.getElementById("auth-submit");
 const authCancel = document.getElementById("auth-cancel");
-const authError = document.getElementById("auth-error");
 const emailInput = document.getElementById("email");
 const passInput = document.getElementById("password");
-const videoInput = document.getElementById("video-url");
-const videoFrame = document.getElementById("video-frame");
-const loadVideoBtn = document.getElementById("load-video");
-const addFolderBtn = document.getElementById("add-folder");
-const folderSelect = document.getElementById("folder-select");
-const addReactionGroupBtn = document.getElementById("add-reaction-group");
-const reactionContainer = document.getElementById("reaction-group-container");
+const authError = document.getElementById("auth-error");
 
-let currentUser = null;
+const videoInput = document.getElementById("video-url");
+const loadVideoBtn = document.getElementById("load-video");
+const videoFrame = document.getElementById("video-frame");
+
+const reactionGroupContainer = document.getElementById("reaction-group-container");
+const addReactionGroupBtn = document.getElementById("add-reaction-group");
+const reactionBubble = document.getElementById("reaction-bubble");
+
 let authMode = "login";
 
-// Auth listeners
+// UI Events
 loginBtn.onclick = () => {
   authMode = "login";
-  authTitle.textContent = "Log In";
+  authModalTitle.textContent = "Log In";
   authModal.classList.remove("hidden");
-};
-signupBtn.onclick = () => {
-  authMode = "signup";
-  authTitle.textContent = "Sign Up";
-  authModal.classList.remove("hidden");
-};
-authCancel.onclick = () => {
-  authModal.classList.add("hidden");
-  emailInput.value = "";
-  passInput.value = "";
-  authError.textContent = "";
-};
-logoutBtn.onclick = () => {
-  signOut(auth);
 };
 
-// Submit login/signup
+signupBtn.onclick = () => {
+  authMode = "signup";
+  authModalTitle.textContent = "Sign Up";
+  authModal.classList.remove("hidden");
+};
+
+authCancel.onclick = () => {
+  authModal.classList.add("hidden");
+  authError.textContent = "";
+};
+
 authSubmit.onclick = async () => {
   const email = emailInput.value;
   const password = passInput.value;
@@ -83,73 +71,81 @@ authSubmit.onclick = async () => {
       await createUserWithEmailAndPassword(auth, email, password);
     }
     authModal.classList.add("hidden");
+    emailInput.value = "";
+    passInput.value = "";
+    authError.textContent = "";
   } catch (error) {
-    authError.textContent = "Authentication failed. Check your details.";
+    switch (error.code) {
+      case "auth/user-not-found":
+        authError.textContent = "No account found with this email.";
+        break;
+      case "auth/wrong-password":
+        authError.textContent = "Incorrect password.";
+        break;
+      case "auth/email-already-in-use":
+        authError.textContent = "Email already in use.";
+        break;
+      case "auth/invalid-email":
+        authError.textContent = "Invalid email address.";
+        break;
+      default:
+        authError.textContent = "Something went wrong. Try again.";
+    }
   }
 };
 
-// Auth state change
-onAuthStateChanged(auth, user => {
-  currentUser = user;
+logoutBtn.onclick = async () => {
+  await signOut(auth);
+};
+
+// React to auth state
+onAuthStateChanged(auth, (user) => {
   if (user) {
     loginBtn.style.display = "none";
     signupBtn.style.display = "none";
     logoutBtn.style.display = "inline-block";
-    loadFolders();
   } else {
     loginBtn.style.display = "inline-block";
     signupBtn.style.display = "inline-block";
     logoutBtn.style.display = "none";
-    folderSelect.innerHTML = "";
   }
 });
 
-// Load video
+// Load Video
 loadVideoBtn.onclick = () => {
   const url = videoInput.value;
+  if (!url) return;
   videoFrame.src = url.includes("youtube.com") || url.includes("youtu.be")
-    ? `https://www.youtube.com/embed/${extractYouTubeID(url)}`
+    ? convertYouTubeToEmbed(url)
     : url;
 };
 
-function extractYouTubeID(url) {
-  const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
-  return match ? match[1] : "";
+// YouTube URL -> Embed
+function convertYouTubeToEmbed(url) {
+  const match = url.match(
+    /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/
+  );
+  return match ? `https://www.youtube.com/embed/${match[1]}` : url;
 }
 
-// Folder system
-addFolderBtn.onclick = async () => {
-  const name = prompt("Folder name?");
-  if (!name || !currentUser) return;
-  const ref = doc(db, "users", currentUser.uid);
-  await setDoc(ref, { folders: arrayUnion(name) }, { merge: true });
-  loadFolders();
-};
-
-async function loadFolders() {
-  const ref = doc(db, "users", currentUser.uid);
-  const snap = await getDoc(ref);
-  if (snap.exists()) {
-    const folders = snap.data().folders || [];
-    folderSelect.innerHTML = "";
-    folders.forEach(name => {
-      const opt = document.createElement("option");
-      opt.textContent = name;
-      folderSelect.appendChild(opt);
-    });
-  }
-}
-
-// Reaction group (basic)
+// Add Reaction Group (basic placeholder)
 addReactionGroupBtn.onclick = () => {
-  const groupName = prompt("Reaction group name?");
-  if (!groupName) return;
-  const container = document.createElement("div");
-  container.innerHTML = `
-    <h4>${groupName}</h4>
-    <button>Needs Work</button>
-    <button>Good</button>
-    <button>Excellent</button>
-  `;
-  reactionContainer.appendChild(container);
+  const groupDiv = document.createElement("div");
+  groupDiv.className = "reaction-group";
+  ["Needs Improvement", "Good", "Excellent"].forEach((label) => {
+    const btn = document.createElement("button");
+    btn.textContent = label;
+    btn.onclick = () => showBubble(label);
+    groupDiv.appendChild(btn);
+  });
+  reactionGroupContainer.appendChild(groupDiv);
 };
+
+// Show feedback bubble in top right of video
+function showBubble(text) {
+  reactionBubble.textContent = text;
+  reactionBubble.classList.remove("hidden");
+  setTimeout(() => {
+    reactionBubble.classList.add("hidden");
+  }, 2000);
+}
