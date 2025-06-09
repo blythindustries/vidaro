@@ -2,46 +2,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vidaro</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Vidaro</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Vidaro: Where Video Meets Insight</h1>
-    <div id="auth-controls">
-      <button id="loginBtn">Login</button>
-      <button id="signupBtn">Sign Up</button>
-      <button id="logoutBtn" style="display:none;">Logout</button>
-    </div>
-  </header>
-
-  <main>
-    <section id="video-container">
-      <input type="text" id="videoURL" placeholder="Paste YouTube, Vimeo, or file link" />
-      <button id="loadVideo">Load Video</button>
-      <div id="playerWrapper">
-        <iframe id="videoPlayer" allowfullscreen></iframe>
-      </div>
-    </section>
-
-    <section id="reaction-controls">
-      <h2>Reactions</h2>
-      <div id="reactionGroupArea"></div>
-      <button id="addReactionGroup">+ Add Reaction Group</button>
-    </section>
-
-    <section id="folder-controls">
-      <h2>Folders</h2>
-      <div id="folderList"></div>
-      <input type="text" id="newFolderName" placeholder="New folder name" />
-      <button id="createFolder">+ Create Folder</button>
-    </section>
-
-    <div id="reactionBubbleContainer"></div>
-  </main>
-
-  <script src="app.js"></script>
+    <div id="app"></div>
+    <script src="app.js"></script>
 </body>
 </html>
