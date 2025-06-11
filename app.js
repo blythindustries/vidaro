@@ -172,7 +172,7 @@ function convertYouTubeToEmbed(url) {
     videoFrame.parentNode.insertBefore(wrapper, videoFrame);
     wrapper.appendChild(videoFrame);
   }
-  // Move reactionBubble inside wrapper and style it for top-right corner
+  // Ensure reactionBubble is inside wrapper
   if (reactionBubble.parentNode !== wrapper) {
     wrapper.appendChild(reactionBubble);
   }
