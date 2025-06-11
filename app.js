@@ -82,6 +82,7 @@ async function handleAuthSubmit() {
     } else {
       await createUserWithEmailAndPassword(auth, email, password);
     }
+    // Ensure modal is hidden and inputs cleared on success
     authModal.classList.add("hidden");
     emailInput.value = "";
     passInput.value = "";
@@ -116,7 +117,11 @@ onAuthStateChanged(auth, (user) => {
     loginBtn.style.display = "none";
     signupBtn.style.display = "none";
     logoutBtn.style.display = "inline-block";
+    // Ensure modal is hidden and inputs cleared on auth state change
     authModal.classList.add("hidden");
+    emailInput.value = "";
+    passInput.value = "";
+    authError.textContent = "";
   } else {
     loginBtn.style.display = "inline-block";
     signupBtn.style.display = "inline-block";
