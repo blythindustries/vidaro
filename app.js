@@ -99,14 +99,10 @@ async function handleAuthSubmit() {
     emailInput.value = "";
     passInput.value = "";
     authError.textContent = "";
-    // Force UI update based on login state
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        loginBtn.style.display = "none";
-        signupBtn.style.display = "none";
-        logoutBtn.style.display = "inline-block";
-      }
-    });
+    // Directly update login/logout button display logic after successful login/signup
+    loginBtn.style.display = "none";
+    signupBtn.style.display = "none";
+    logoutBtn.style.display = "inline-block";
   } catch (error) {
     switch (error.code) {
       case "auth/user-not-found":
@@ -155,6 +151,7 @@ onAuthStateChanged(auth, (user) => {
 loadVideoBtn.onclick = () => {
   const url = videoInput.value;
   if (!url) return;
+  videoFrame.style.display = "block";
   videoFrame.src = url.includes("youtube.com") || url.includes("youtu.be")
     ? convertYouTubeToEmbed(url)
     : url;
@@ -162,10 +159,9 @@ loadVideoBtn.onclick = () => {
 
 // YouTube URL -> Embed
 function convertYouTubeToEmbed(url) {
-  const match = url.match(
-    /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/
-  );
-  return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+  const regExp = /^.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return match && match[1] ? `https://www.youtube.com/embed/${match[1]}` : "";
 }
 
 // Wrap videoFrame with a container to position reactionBubble inside it top-right
@@ -306,6 +302,11 @@ addReactionGroupBtn.onclick = () => {
     groupDiv.style.alignItems = "flex-start";
     groupDiv.style.marginRight = "20px";
     groupDiv.style.minWidth = "150px";
+    groupDiv.style.backgroundColor = "#ffffff";
+    groupDiv.style.border = "1px solid #ddd";
+    groupDiv.style.borderRadius = "10px";
+    groupDiv.style.padding = "10px";
+    groupDiv.style.boxShadow = "0 2px 5px rgba(0,0,0,0.1)";
 
     const title = document.createElement("h3");
     title.textContent = groupName;
@@ -329,7 +330,10 @@ addReactionGroupBtn.onclick = () => {
       btn.style.color = "white";
       btn.style.padding = "5px 10px";
       btn.style.marginRight = "5px";
-      btn.style.borderRadius = "3px";
+      btn.style.borderRadius = "9999px"; // pill shape
+      btn.style.fontWeight = "600";
+      btn.style.fontSize = "0.85em";
+      btn.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
       btn.style.cursor = "pointer";
       btn.onclick = () => showBubble(`${groupName} - ${btn.textContent}`);
 
@@ -444,6 +448,7 @@ addReactionGroupBtn.onclick = () => {
       deleteBtn.style.padding = "3px 6px";
       deleteBtn.style.fontSize = "0.8em";
       deleteBtn.style.cursor = "pointer";
+      deleteBtn.style.marginLeft = "4px";
       deleteBtn.onclick = () => btnWrapper.remove();
 
       btnWrapper.appendChild(btn);

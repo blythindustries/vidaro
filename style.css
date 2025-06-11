@@ -72,6 +72,8 @@ body {
   padding-bottom: 56.25%;
   height: 0;
   position: relative;
+  max-height: 70vh;
+  overflow: hidden;
 }
 
 #video-frame {
@@ -111,6 +113,7 @@ body {
   border-radius: 8px;
   background-color: #fff;
   min-width: 200px;
+  position: relative;
 }
 
 .reaction-group h3 {
@@ -151,6 +154,8 @@ body {
   justify-content: center;
   align-self: flex-start;
   flex-shrink: 0;
+  min-width: 160px;
+  max-width: 160px;
 }
 
 #add-reaction-group:hover,
@@ -253,6 +258,8 @@ body {
   padding: 0.2rem 0.4rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  flex: 1;
+  min-width: 100px;
 }
 
 .reaction-remove {
@@ -321,4 +328,14 @@ input[type="color"] {
 
 .color-swatch.selected {
   border-color: #333;
+}
+
+button:hover {
+  opacity: 0.9;
+  transition: background-color 0.3s ease, opacity 0.2s ease;
+}
+
+.reaction-button:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
 }

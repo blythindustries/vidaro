@@ -5,37 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vidaro</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script type="module" src="app.js" defer></script>
 </head>
 <body>
-  <div class="header">
+  <header class="header">
     <h1>Vidaro: Where Video Meets Insight</h1>
     <div id="auth-buttons">
       <button id="login-btn">Log In</button>
       <button id="signup-btn">Sign Up</button>
       <button id="logout-btn" style="display: none;">Log Out</button>
     </div>
-  </div>
+  </header>
 
-  <div class="main">
-    <div class="video-section">
-      <input id="video-url" type="text" placeholder="Paste YouTube or video file URL..." />
-      <button id="load-video">Load Video</button>
-      <div class="video-wrapper">
-        <iframe id="video-frame" width="640" height="360" frameborder="0" allowfullscreen></iframe>
-        <div id="reaction-bubble" class="bubble hidden"></div>
-      </div>
-    </div>
+  <div class="content-card">
+    <main class="main">
+      <section class="video-section">
+        <input id="video-url" type="text" placeholder="Paste YouTube or video file URL..." />
+        <button id="load-video">Load Video</button>
+        <div class="video-wrapper">
+          <iframe id="video-frame" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+          <div id="video-error" class="error-message hidden"></div>
+          <div id="reaction-bubble" class="bubble hidden"></div>
+          <div id="watermark-overlay" class="hidden watermark-overlay">Vidaro Trial</div>
+        </div>
+      </section>
 
-    <div class="reaction-controls">
-      <div id="reaction-group-container" class="reaction-columns"></div>
-      <button id="add-reaction-group">+ Reaction Group</button>
-    </div>
+      <section class="reaction-controls">
+        <div id="reaction-group-container" class="reaction-columns"></div>
+        <button id="add-reaction-group"><i class="fas fa-plus-circle"></i> Reaction Group</button>
+      </section>
 
-    <div class="folder-controls">
-      <select id="folder-select"></select>
-      <button id="add-folder">+ Folder</button>
-    </div>
+      <section class="folder-controls">
+        <select id="folder-select"></select>
+        <button id="add-folder"><i class="fas fa-folder-plus"></i> Folder</button>
+      </section>
+    </main>
   </div>
 
   <!-- Modal for Login/Signup -->
@@ -240,4 +245,7 @@
     });
   </script>
 </body>
+  <footer class="footer">
+    <p>© 2025 Vidaro. All rights reserved.</p>
+  </footer>
 </html>
