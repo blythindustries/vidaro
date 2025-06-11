@@ -99,6 +99,14 @@ async function handleAuthSubmit() {
     emailInput.value = "";
     passInput.value = "";
     authError.textContent = "";
+    // Force UI update based on login state
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loginBtn.style.display = "none";
+        signupBtn.style.display = "none";
+        logoutBtn.style.display = "inline-block";
+      }
+    });
   } catch (error) {
     switch (error.code) {
       case "auth/user-not-found":

@@ -223,12 +223,15 @@
       const loginBtn = document.getElementById('login-btn');
       const signupBtn = document.getElementById('signup-btn');
       const logoutBtn = document.getElementById('logout-btn');
+      const authModal = document.getElementById('auth-modal');
+      const authForm = document.getElementById('auth-form');
 
       if (user) {
         loginBtn.style.display = 'none';
         signupBtn.style.display = 'none';
         logoutBtn.style.display = 'inline-block';
-        document.getElementById('auth-modal').classList.add('hidden');
+        authModal.classList.add('hidden');
+        authForm.reset();
       } else {
         loginBtn.style.display = 'inline-block';
         signupBtn.style.display = 'inline-block';

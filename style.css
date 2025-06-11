@@ -89,6 +89,7 @@ body {
   justify-content: flex-start;
   align-items: flex-start;
   gap: 1rem;
+  flex-direction: row;
 }
 
 .folder-controls {
@@ -122,7 +123,7 @@ body {
 }
 
 .reaction-group button {
-  margin: 0.3rem 0;
+  margin: 0.25rem 0;
   padding: 0.4rem 0.8rem;
   font-size: 0.85rem;
   border: none;
@@ -149,6 +150,7 @@ body {
   align-items: center;
   justify-content: center;
   align-self: flex-start;
+  flex-shrink: 0;
 }
 
 #add-reaction-group:hover,
@@ -294,6 +296,8 @@ input[type="color"] {
   border: 1px solid #ccc;
   border-radius: 6px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  z-index: 999;
 }
 
 .color-swatch {
@@ -305,7 +309,12 @@ input[type="color"] {
   transition: border-color 0.2s ease;
 }
 
-.color-swatch:hover,
+.color-swatch:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  border-color: #999;
+}
+
 .color-swatch:focus {
   border-color: #999;
 }
