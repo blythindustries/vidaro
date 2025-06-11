@@ -114,14 +114,16 @@ logoutBtn.onclick = async () => {
 // React to auth state
 onAuthStateChanged(auth, (user) => {
   if (user) {
+    console.log("User logged in:", user.email);
     loginBtn.style.display = "none";
     signupBtn.style.display = "none";
     logoutBtn.style.display = "inline-block";
-    // Ensure modal is hidden and inputs cleared on auth state change
-    authModal.classList.add("hidden");
-    emailInput.value = "";
-    passInput.value = "";
-    authError.textContent = "";
+    setTimeout(() => {
+      authModal.classList.add("hidden");
+      emailInput.value = "";
+      passInput.value = "";
+      authError.textContent = "";
+    }, 0);
   } else {
     loginBtn.style.display = "inline-block";
     signupBtn.style.display = "inline-block";
