@@ -6,7 +6,6 @@
   <title>Vidaro</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script type="module" src="app.js" defer></script>
 </head>
 <body>
   <header class="header">
@@ -220,30 +219,8 @@
       <button id="cancel-reaction-group">Cancel</button>
     </div>
   </div>
-  <script type="module">
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      const loginBtn = document.getElementById('login-btn');
-      const signupBtn = document.getElementById('signup-btn');
-      const logoutBtn = document.getElementById('logout-btn');
-      const authModal = document.getElementById('auth-modal');
-      const authForm = document.getElementById('auth-form');
-
-      if (user) {
-        loginBtn.style.display = 'none';
-        signupBtn.style.display = 'none';
-        logoutBtn.style.display = 'inline-block';
-        authModal.classList.add('hidden');
-        authForm.reset();
-      } else {
-        loginBtn.style.display = 'inline-block';
-        signupBtn.style.display = 'inline-block';
-        logoutBtn.style.display = 'none';
-      }
-    });
-  </script>
+  <script type="module" src="firebase-init.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
   <footer class="footer">
     <p>© 2025 Vidaro. All rights reserved.</p>
