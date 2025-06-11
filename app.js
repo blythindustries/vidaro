@@ -112,12 +112,8 @@ async function handleAuthSubmit() {
   }
 }
 
-logoutBtn.onclick = async () => {
-  await signOut(auth);
-};
-
 // Ensure DOM is fully loaded before listening to auth changes
-window.onload = () => {
+window.addEventListener("DOMContentLoaded", () => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       console.log("User logged in:", user.email);
@@ -129,12 +125,18 @@ window.onload = () => {
       passInput.value = "";
       authError.textContent = "";
     } else {
+      console.log("User logged out");
       loginBtn.style.display = "inline-block";
       signupBtn.style.display = "inline-block";
       logoutBtn.style.display = "none";
     }
   });
-};
+
+  logoutBtn.onclick = async () => {
+    await signOut(auth);
+    console.log("User signed out");
+  };
+});
 
 // Load Video
 loadVideoBtn.onclick = () => {
