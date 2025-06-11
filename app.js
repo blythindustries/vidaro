@@ -222,17 +222,30 @@ addReactionGroupBtn.onclick = () => {
       wrapper.className = "reaction-field";
       wrapper.innerHTML = `
         <label>Label ${i + 1}: <input type="text" class="reaction-label" value="Reaction ${i + 1}" /></label>
-        <label>Color ${i + 1}: <select class="reaction-color">
-          <option value="#4285f4">Blue</option>
-          <option value="#ea4335">Red</option>
-          <option value="#fbbc05">Yellow</option>
-          <option value="#34a853">Green</option>
-          <option value="#ff6f00">Orange</option>
-          <option value="#9c27b0">Purple</option>
-        </select></label>
+        <label>Color ${i + 1}:</label>
+        <div class="color-palette" data-index="${i}">
+          <div class="color-swatch selected" style="background-color:#4285f4" data-color="#4285f4"></div>
+          <div class="color-swatch" style="background-color:#ea4335" data-color="#ea4335"></div>
+          <div class="color-swatch" style="background-color:#fbbc05" data-color="#fbbc05"></div>
+          <div class="color-swatch" style="background-color:#34a853" data-color="#34a853"></div>
+          <div class="color-swatch" style="background-color:#ff6f00" data-color="#ff6f00"></div>
+          <div class="color-swatch" style="background-color:#9c27b0" data-color="#9c27b0"></div>
+        </div>
       `;
       fieldsContainer.appendChild(wrapper);
     }
+
+    // Add click event listeners for color swatches
+    const palettes = fieldsContainer.querySelectorAll(".color-palette");
+    palettes.forEach(palette => {
+      const swatches = palette.querySelectorAll(".color-swatch");
+      swatches.forEach(swatch => {
+        swatch.onclick = () => {
+          swatches.forEach(s => s.classList.remove("selected"));
+          swatch.classList.add("selected");
+        };
+      });
+    });
   }
 
   renderReactionFields(parseInt(countInput.value, 10));
@@ -273,11 +286,11 @@ addReactionGroupBtn.onclick = () => {
     title.textContent = groupName;
     groupDiv.appendChild(title);
 
-    const colors = modal.querySelectorAll(".reaction-color");
-
     labels.forEach((labelEl, i) => {
       const reactionLabel = labelEl.value;
-      const reactionColor = colors[i].value;
+      const palette = modal.querySelector(`.color-palette[data-index="${i}"]`);
+      const selectedSwatch = palette.querySelector(".color-swatch.selected");
+      const reactionColor = selectedSwatch ? selectedSwatch.getAttribute("data-color") : "#4285f4";
 
       const btnWrapper = document.createElement("div");
       btnWrapper.style.display = "flex";
@@ -303,31 +316,85 @@ addReactionGroupBtn.onclick = () => {
       editBtn.style.fontSize = "0.8em";
       editBtn.style.cursor = "pointer";
       editBtn.onclick = () => {
-        const newLabel = prompt("Enter new label:", btn.textContent);
-        if (newLabel) btn.textContent = newLabel;
+        // Modal-style overlay for editing label and color
+        const modalBackdrop = document.createElement("div");
+        modalBackdrop.className = "modal-backdrop";
+        modalBackdrop.style.zIndex = "10000";
+        const modal = document.createElement("div");
+        modal.className = "reaction-modal";
+        modal.style.zIndex = "10001";
+        modal.style.minWidth = "300px";
+        modal.innerHTML = `
+          <h3>Edit Reaction</h3>
+          <label>Label: <input type="text" id="edit-reaction-label" value="${btn.textContent}" /></label>
+          <label>Color:</label>
+          <div class="color-palette" id="edit-color-palette">
+            <div class="color-swatch" style="background-color:#4285f4" data-color="#4285f4"></div>
+            <div class="color-swatch" style="background-color:#ea4335" data-color="#ea4335"></div>
+            <div class="color-swatch" style="background-color:#fbbc05" data-color="#fbbc05"></div>
+            <div class="color-swatch" style="background-color:#34a853" data-color="#34a853"></div>
+            <div class="color-swatch" style="background-color:#ff6f00" data-color="#ff6f00"></div>
+            <div class="color-swatch" style="background-color:#9c27b0" data-color="#9c27b0"></div>
+          </div>
+          <div class="modal-buttons" style="margin-top:12px;">
+            <button id="edit-save-btn">Save</button>
+            <button id="edit-cancel-btn">Cancel</button>
+          </div>
+        `;
+        document.body.appendChild(modalBackdrop);
+        document.body.appendChild(modal);
 
-        const colorOptions = ["#4285f4", "#ea4335", "#fbbc05", "#34a853", "#ff6f00", "#9c27b0"];
-        const currentColor = btn.style.backgroundColor;
-        const colorSelect = document.createElement("select");
-        colorOptions.forEach(color => {
-          const opt = document.createElement("option");
-          opt.value = color;
-          opt.textContent = color;
-          opt.selected = currentColor === color;
-          colorSelect.appendChild(opt);
-        });
-        const confirmColor = confirm("Use dropdown to select new color:");
-        if (confirmColor) {
-          document.body.appendChild(colorSelect);
-          colorSelect.style.position = "fixed";
-          colorSelect.style.top = "50%";
-          colorSelect.style.left = "50%";
-          colorSelect.style.zIndex = "9999";
-          colorSelect.onchange = () => {
-            btn.style.backgroundColor = colorSelect.value;
-            document.body.removeChild(colorSelect);
-          };
+        // Preselect color swatch
+        const palette = modal.querySelector("#edit-color-palette");
+        const swatches = palette.querySelectorAll(".color-swatch");
+        let currentColor = btn.style.backgroundColor;
+        // Convert rgb(x,x,x) to hex if needed
+        function rgbToHex(rgb) {
+          // e.g. rgb(66, 133, 244)
+          if (!rgb.startsWith("rgb")) return rgb;
+          const nums = rgb.match(/\d+/g);
+          if (!nums) return rgb;
+          return (
+            "#" +
+            nums
+              .map((n) => {
+                let hex = parseInt(n).toString(16);
+                if (hex.length < 2) hex = "0" + hex;
+                return hex;
+              })
+              .join("")
+          );
         }
+        const currentHex = rgbToHex(currentColor);
+        swatches.forEach((swatch) => {
+          if (swatch.getAttribute("data-color").toLowerCase() === currentHex.toLowerCase()) {
+            swatch.classList.add("selected");
+          }
+        });
+
+        swatches.forEach((swatch) => {
+          swatch.onclick = () => {
+            swatches.forEach((s) => s.classList.remove("selected"));
+            swatch.classList.add("selected");
+          };
+        });
+
+        // Cancel handler
+        modal.querySelector("#edit-cancel-btn").onclick = () => {
+          modal.remove();
+          modalBackdrop.remove();
+        };
+        // Save handler
+        modal.querySelector("#edit-save-btn").onclick = () => {
+          const newLabel = modal.querySelector("#edit-reaction-label").value.trim();
+          if (newLabel) btn.textContent = newLabel;
+          const selectedSwatch = palette.querySelector(".color-swatch.selected");
+          if (selectedSwatch) {
+            btn.style.backgroundColor = selectedSwatch.getAttribute("data-color");
+          }
+          modal.remove();
+          modalBackdrop.remove();
+        };
       };
 
       // Delete button

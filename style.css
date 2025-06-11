@@ -282,3 +282,23 @@ input[type="color"] {
   height: 2rem;
   width: 2rem;
 }
+/* Color palette grid for reaction customization */
+.color-palette {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(24px, 1fr));
+  gap: 4px;
+  margin-top: 0.5rem;
+  max-width: 160px;
+}
+
+.color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.color-swatch.selected {
+  border-color: #333;
+}
