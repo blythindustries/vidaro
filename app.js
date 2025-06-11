@@ -61,6 +61,19 @@ authCancel.onclick = () => {
 };
 
 authSubmit.onclick = async () => {
+  await handleAuthSubmit();
+};
+
+// Enable Enter key to submit form
+["email", "password"].forEach((id) => {
+  document.getElementById(id).addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      handleAuthSubmit();
+    }
+  });
+});
+
+async function handleAuthSubmit() {
   const email = emailInput.value;
   const password = passInput.value;
   try {
@@ -91,7 +104,7 @@ authSubmit.onclick = async () => {
         authError.textContent = "Something went wrong. Try again.";
     }
   }
-};
+}
 
 logoutBtn.onclick = async () => {
   await signOut(auth);
@@ -104,9 +117,6 @@ onAuthStateChanged(auth, (user) => {
     signupBtn.style.display = "none";
     logoutBtn.style.display = "inline-block";
     authModal.classList.add("hidden");
-    emailInput.value = "";
-    passInput.value = "";
-    authError.textContent = "";
   } else {
     loginBtn.style.display = "inline-block";
     signupBtn.style.display = "inline-block";
