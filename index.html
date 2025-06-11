@@ -61,42 +61,153 @@
         <!-- Each entry is a row with text and color picker -->
         <div class="reaction-entry">
           <input type="text" placeholder="Reaction Label" />
-          <div class="color-palette">
-            <div class="color-swatch" data-color="#FFD600" style="background-color: #FFD600;"></div>
-            <div class="color-swatch" data-color="#FF5252" style="background-color: #FF5252;"></div>
-            <div class="color-swatch" data-color="#4CAF50" style="background-color: #4CAF50;"></div>
-            <div class="color-swatch" data-color="#2196F3" style="background-color: #2196F3;"></div>
-            <div class="color-swatch" data-color="#FFB300" style="background-color: #FFB300;"></div>
-            <div class="color-swatch" data-color="#AB47BC" style="background-color: #AB47BC;"></div>
-            <div class="color-swatch" data-color="#00B8D4" style="background-color: #00B8D4;"></div>
-            <div class="color-swatch" data-color="#F06292" style="background-color: #F06292;"></div>
-          </div>
+          <select class="color-dropdown palette-grid">
+            <optgroup label="Yellow">
+              <option value="#FFF9C4" style="background-color:#FFF9C4;">Light Yellow</option>
+              <option value="#FFEB3B" style="background-color:#FFEB3B;">Yellow</option>
+              <option value="#FBC02D" style="background-color:#FBC02D;">Dark Yellow</option>
+            </optgroup>
+            <optgroup label="Red">
+              <option value="#FFCDD2" style="background-color:#FFCDD2;">Light Red</option>
+              <option value="#F44336" style="background-color:#F44336;">Red</option>
+              <option value="#D32F2F" style="background-color:#D32F2F;">Dark Red</option>
+            </optgroup>
+            <optgroup label="Blue">
+              <option value="#BBDEFB" style="background-color:#BBDEFB;">Light Blue</option>
+              <option value="#2196F3" style="background-color:#2196F3;">Blue</option>
+              <option value="#1565C0" style="background-color:#1565C0;">Dark Blue</option>
+            </optgroup>
+            <optgroup label="Green">
+              <option value="#C8E6C9" style="background-color:#C8E6C9;">Light Green</option>
+              <option value="#4CAF50" style="background-color:#4CAF50;">Green</option>
+              <option value="#388E3C" style="background-color:#388E3C;">Dark Green</option>
+            </optgroup>
+            <optgroup label="Orange">
+              <option value="#FFE0B2" style="background-color:#FFE0B2;">Light Orange</option>
+              <option value="#FF9800" style="background-color:#FF9800;">Orange</option>
+              <option value="#F57C00" style="background-color:#F57C00;">Dark Orange</option>
+            </optgroup>
+            <optgroup label="Purple">
+              <option value="#E1BEE7" style="background-color:#E1BEE7;">Light Purple</option>
+              <option value="#9C27B0" style="background-color:#9C27B0;">Purple</option>
+              <option value="#6A1B9A" style="background-color:#6A1B9A;">Dark Purple</option>
+            </optgroup>
+            <optgroup label="Grey">
+              <option value="#F5F5F5" style="background-color:#F5F5F5;">Light Grey</option>
+              <option value="#9E9E9E" style="background-color:#9E9E9E;">Grey</option>
+              <option value="#424242" style="background-color:#424242;">Dark Grey</option>
+            </optgroup>
+            <optgroup label="Teal">
+              <option value="#B2DFDB" style="background-color:#B2DFDB;">Light Teal</option>
+              <option value="#009688" style="background-color:#009688;">Teal</option>
+              <option value="#00695C" style="background-color:#00695C;">Dark Teal</option>
+            </optgroup>
+            <optgroup label="Pink">
+              <option value="#F8BBD0" style="background-color:#F8BBD0;">Light Pink</option>
+              <option value="#E91E63" style="background-color:#E91E63;">Pink</option>
+              <option value="#AD1457" style="background-color:#AD1457;">Dark Pink</option>
+            </optgroup>
+          </select>
         </div>
         <div class="reaction-entry">
           <input type="text" placeholder="Reaction Label" />
-          <div class="color-palette">
-            <div class="color-swatch" data-color="#FFD600" style="background-color: #FFD600;"></div>
-            <div class="color-swatch" data-color="#FF5252" style="background-color: #FF5252;"></div>
-            <div class="color-swatch" data-color="#4CAF50" style="background-color: #4CAF50;"></div>
-            <div class="color-swatch" data-color="#2196F3" style="background-color: #2196F3;"></div>
-            <div class="color-swatch" data-color="#FFB300" style="background-color: #FFB300;"></div>
-            <div class="color-swatch" data-color="#AB47BC" style="background-color: #AB47BC;"></div>
-            <div class="color-swatch" data-color="#00B8D4" style="background-color: #00B8D4;"></div>
-            <div class="color-swatch" data-color="#F06292" style="background-color: #F06292;"></div>
-          </div>
+          <select class="color-dropdown palette-grid">
+            <optgroup label="Yellow">
+              <option value="#FFF9C4" style="background-color:#FFF9C4;">Light Yellow</option>
+              <option value="#FFEB3B" style="background-color:#FFEB3B;">Yellow</option>
+              <option value="#FBC02D" style="background-color:#FBC02D;">Dark Yellow</option>
+            </optgroup>
+            <optgroup label="Red">
+              <option value="#FFCDD2" style="background-color:#FFCDD2;">Light Red</option>
+              <option value="#F44336" style="background-color:#F44336;">Red</option>
+              <option value="#D32F2F" style="background-color:#D32F2F;">Dark Red</option>
+            </optgroup>
+            <optgroup label="Blue">
+              <option value="#BBDEFB" style="background-color:#BBDEFB;">Light Blue</option>
+              <option value="#2196F3" style="background-color:#2196F3;">Blue</option>
+              <option value="#1565C0" style="background-color:#1565C0;">Dark Blue</option>
+            </optgroup>
+            <optgroup label="Green">
+              <option value="#C8E6C9" style="background-color:#C8E6C9;">Light Green</option>
+              <option value="#4CAF50" style="background-color:#4CAF50;">Green</option>
+              <option value="#388E3C" style="background-color:#388E3C;">Dark Green</option>
+            </optgroup>
+            <optgroup label="Orange">
+              <option value="#FFE0B2" style="background-color:#FFE0B2;">Light Orange</option>
+              <option value="#FF9800" style="background-color:#FF9800;">Orange</option>
+              <option value="#F57C00" style="background-color:#F57C00;">Dark Orange</option>
+            </optgroup>
+            <optgroup label="Purple">
+              <option value="#E1BEE7" style="background-color:#E1BEE7;">Light Purple</option>
+              <option value="#9C27B0" style="background-color:#9C27B0;">Purple</option>
+              <option value="#6A1B9A" style="background-color:#6A1B9A;">Dark Purple</option>
+            </optgroup>
+            <optgroup label="Grey">
+              <option value="#F5F5F5" style="background-color:#F5F5F5;">Light Grey</option>
+              <option value="#9E9E9E" style="background-color:#9E9E9E;">Grey</option>
+              <option value="#424242" style="background-color:#424242;">Dark Grey</option>
+            </optgroup>
+            <optgroup label="Teal">
+              <option value="#B2DFDB" style="background-color:#B2DFDB;">Light Teal</option>
+              <option value="#009688" style="background-color:#009688;">Teal</option>
+              <option value="#00695C" style="background-color:#00695C;">Dark Teal</option>
+            </optgroup>
+            <optgroup label="Pink">
+              <option value="#F8BBD0" style="background-color:#F8BBD0;">Light Pink</option>
+              <option value="#E91E63" style="background-color:#E91E63;">Pink</option>
+              <option value="#AD1457" style="background-color:#AD1457;">Dark Pink</option>
+            </optgroup>
+          </select>
         </div>
         <div class="reaction-entry">
           <input type="text" placeholder="Reaction Label" />
-          <div class="color-palette">
-            <div class="color-swatch" data-color="#FFD600" style="background-color: #FFD600;"></div>
-            <div class="color-swatch" data-color="#FF5252" style="background-color: #FF5252;"></div>
-            <div class="color-swatch" data-color="#4CAF50" style="background-color: #4CAF50;"></div>
-            <div class="color-swatch" data-color="#2196F3" style="background-color: #2196F3;"></div>
-            <div class="color-swatch" data-color="#FFB300" style="background-color: #FFB300;"></div>
-            <div class="color-swatch" data-color="#AB47BC" style="background-color: #AB47BC;"></div>
-            <div class="color-swatch" data-color="#00B8D4" style="background-color: #00B8D4;"></div>
-            <div class="color-swatch" data-color="#F06292" style="background-color: #F06292;"></div>
-          </div>
+          <select class="color-dropdown palette-grid">
+            <optgroup label="Yellow">
+              <option value="#FFF9C4" style="background-color:#FFF9C4;">Light Yellow</option>
+              <option value="#FFEB3B" style="background-color:#FFEB3B;">Yellow</option>
+              <option value="#FBC02D" style="background-color:#FBC02D;">Dark Yellow</option>
+            </optgroup>
+            <optgroup label="Red">
+              <option value="#FFCDD2" style="background-color:#FFCDD2;">Light Red</option>
+              <option value="#F44336" style="background-color:#F44336;">Red</option>
+              <option value="#D32F2F" style="background-color:#D32F2F;">Dark Red</option>
+            </optgroup>
+            <optgroup label="Blue">
+              <option value="#BBDEFB" style="background-color:#BBDEFB;">Light Blue</option>
+              <option value="#2196F3" style="background-color:#2196F3;">Blue</option>
+              <option value="#1565C0" style="background-color:#1565C0;">Dark Blue</option>
+            </optgroup>
+            <optgroup label="Green">
+              <option value="#C8E6C9" style="background-color:#C8E6C9;">Light Green</option>
+              <option value="#4CAF50" style="background-color:#4CAF50;">Green</option>
+              <option value="#388E3C" style="background-color:#388E3C;">Dark Green</option>
+            </optgroup>
+            <optgroup label="Orange">
+              <option value="#FFE0B2" style="background-color:#FFE0B2;">Light Orange</option>
+              <option value="#FF9800" style="background-color:#FF9800;">Orange</option>
+              <option value="#F57C00" style="background-color:#F57C00;">Dark Orange</option>
+            </optgroup>
+            <optgroup label="Purple">
+              <option value="#E1BEE7" style="background-color:#E1BEE7;">Light Purple</option>
+              <option value="#9C27B0" style="background-color:#9C27B0;">Purple</option>
+              <option value="#6A1B9A" style="background-color:#6A1B9A;">Dark Purple</option>
+            </optgroup>
+            <optgroup label="Grey">
+              <option value="#F5F5F5" style="background-color:#F5F5F5;">Light Grey</option>
+              <option value="#9E9E9E" style="background-color:#9E9E9E;">Grey</option>
+              <option value="#424242" style="background-color:#424242;">Dark Grey</option>
+            </optgroup>
+            <optgroup label="Teal">
+              <option value="#B2DFDB" style="background-color:#B2DFDB;">Light Teal</option>
+              <option value="#009688" style="background-color:#009688;">Teal</option>
+              <option value="#00695C" style="background-color:#00695C;">Dark Teal</option>
+            </optgroup>
+            <optgroup label="Pink">
+              <option value="#F8BBD0" style="background-color:#F8BBD0;">Light Pink</option>
+              <option value="#E91E63" style="background-color:#E91E63;">Pink</option>
+              <option value="#AD1457" style="background-color:#AD1457;">Dark Pink</option>
+            </optgroup>
+          </select>
         </div>
       </div>
       <button id="add-reaction-entry">+ Add Reaction</button>
@@ -104,5 +215,26 @@
       <button id="cancel-reaction-group">Cancel</button>
     </div>
   </div>
+  <script type="module">
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      const loginBtn = document.getElementById('login-btn');
+      const signupBtn = document.getElementById('signup-btn');
+      const logoutBtn = document.getElementById('logout-btn');
+
+      if (user) {
+        loginBtn.style.display = 'none';
+        signupBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+        document.getElementById('auth-modal').classList.add('hidden');
+      } else {
+        loginBtn.style.display = 'inline-block';
+        signupBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+      }
+    });
+  </script>
 </body>
 </html>

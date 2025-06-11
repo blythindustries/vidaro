@@ -285,10 +285,15 @@ input[type="color"] {
 /* Color palette grid for reaction customization */
 .color-palette {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(24px, 1fr));
-  gap: 4px;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 6px;
   margin-top: 0.5rem;
-  max-width: 160px;
+  padding: 0.5rem;
+  width: fit-content;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .color-swatch {
@@ -297,6 +302,12 @@ input[type="color"] {
   border-radius: 4px;
   cursor: pointer;
   border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.color-swatch:hover,
+.color-swatch:focus {
+  border-color: #999;
 }
 
 .color-swatch.selected {

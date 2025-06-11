@@ -217,19 +217,32 @@ addReactionGroupBtn.onclick = () => {
 
   function renderReactionFields(count) {
     fieldsContainer.innerHTML = "";
+    // Color palette grid structure (two groups of four colors)
+    const colorGroups = [
+      ["#f28b82", "#fbbc04", "#fff475", "#ccff90"],
+      ["#a7ffeb", "#cbf0f8", "#aecbfa", "#d7aefb"],
+    ];
+    // Default selected color for first swatch
+    const defaultColor = "#f28b82";
     for (let i = 0; i < count; i++) {
       const wrapper = document.createElement("div");
       wrapper.className = "reaction-field";
       wrapper.innerHTML = `
         <label>Label ${i + 1}: <input type="text" class="reaction-label" value="Reaction ${i + 1}" /></label>
         <label>Color ${i + 1}:</label>
-        <div class="color-palette" data-index="${i}">
-          <div class="color-swatch selected" style="background-color:#4285f4" data-color="#4285f4"></div>
-          <div class="color-swatch" style="background-color:#ea4335" data-color="#ea4335"></div>
-          <div class="color-swatch" style="background-color:#fbbc05" data-color="#fbbc05"></div>
-          <div class="color-swatch" style="background-color:#34a853" data-color="#34a853"></div>
-          <div class="color-swatch" style="background-color:#ff6f00" data-color="#ff6f00"></div>
-          <div class="color-swatch" style="background-color:#9c27b0" data-color="#9c27b0"></div>
+        <div class="color-palette-grid color-palette" data-index="${i}">
+          <div class="color-group">
+            <div class="color-swatch${colorGroups[0][0] === defaultColor ? " selected" : ""}" style="background-color:${colorGroups[0][0]}" data-color="${colorGroups[0][0]}"></div>
+            <div class="color-swatch" style="background-color:${colorGroups[0][1]}" data-color="${colorGroups[0][1]}"></div>
+            <div class="color-swatch" style="background-color:${colorGroups[0][2]}" data-color="${colorGroups[0][2]}"></div>
+            <div class="color-swatch" style="background-color:${colorGroups[0][3]}" data-color="${colorGroups[0][3]}"></div>
+          </div>
+          <div class="color-group">
+            <div class="color-swatch" style="background-color:${colorGroups[1][0]}" data-color="${colorGroups[1][0]}"></div>
+            <div class="color-swatch" style="background-color:${colorGroups[1][1]}" data-color="${colorGroups[1][1]}"></div>
+            <div class="color-swatch" style="background-color:${colorGroups[1][2]}" data-color="${colorGroups[1][2]}"></div>
+            <div class="color-swatch" style="background-color:${colorGroups[1][3]}" data-color="${colorGroups[1][3]}"></div>
+          </div>
         </div>
       `;
       fieldsContainer.appendChild(wrapper);
@@ -239,6 +252,10 @@ addReactionGroupBtn.onclick = () => {
     const palettes = fieldsContainer.querySelectorAll(".color-palette");
     palettes.forEach(palette => {
       const swatches = palette.querySelectorAll(".color-swatch");
+      // Select first swatch as default if none selected
+      if (![...swatches].some(s => s.classList.contains("selected"))) {
+        swatches[0].classList.add("selected");
+      }
       swatches.forEach(swatch => {
         swatch.onclick = () => {
           swatches.forEach(s => s.classList.remove("selected"));
@@ -324,17 +341,29 @@ addReactionGroupBtn.onclick = () => {
         modal.className = "reaction-modal";
         modal.style.zIndex = "10001";
         modal.style.minWidth = "300px";
+        // Color palette grid structure for edit modal
+        const colorGroups = [
+          ["#f28b82", "#fbbc04", "#fff475", "#ccff90"],
+          ["#a7ffeb", "#cbf0f8", "#aecbfa", "#d7aefb"],
+        ];
+        // Modal HTML
         modal.innerHTML = `
           <h3>Edit Reaction</h3>
           <label>Label: <input type="text" id="edit-reaction-label" value="${btn.textContent}" /></label>
           <label>Color:</label>
-          <div class="color-palette" id="edit-color-palette">
-            <div class="color-swatch" style="background-color:#4285f4" data-color="#4285f4"></div>
-            <div class="color-swatch" style="background-color:#ea4335" data-color="#ea4335"></div>
-            <div class="color-swatch" style="background-color:#fbbc05" data-color="#fbbc05"></div>
-            <div class="color-swatch" style="background-color:#34a853" data-color="#34a853"></div>
-            <div class="color-swatch" style="background-color:#ff6f00" data-color="#ff6f00"></div>
-            <div class="color-swatch" style="background-color:#9c27b0" data-color="#9c27b0"></div>
+          <div class="color-palette-grid color-palette" id="edit-color-palette">
+            <div class="color-group">
+              <div class="color-swatch" style="background-color:${colorGroups[0][0]}" data-color="${colorGroups[0][0]}"></div>
+              <div class="color-swatch" style="background-color:${colorGroups[0][1]}" data-color="${colorGroups[0][1]}"></div>
+              <div class="color-swatch" style="background-color:${colorGroups[0][2]}" data-color="${colorGroups[0][2]}"></div>
+              <div class="color-swatch" style="background-color:${colorGroups[0][3]}" data-color="${colorGroups[0][3]}"></div>
+            </div>
+            <div class="color-group">
+              <div class="color-swatch" style="background-color:${colorGroups[1][0]}" data-color="${colorGroups[1][0]}"></div>
+              <div class="color-swatch" style="background-color:${colorGroups[1][1]}" data-color="${colorGroups[1][1]}"></div>
+              <div class="color-swatch" style="background-color:${colorGroups[1][2]}" data-color="${colorGroups[1][2]}"></div>
+              <div class="color-swatch" style="background-color:${colorGroups[1][3]}" data-color="${colorGroups[1][3]}"></div>
+            </div>
           </div>
           <div class="modal-buttons" style="margin-top:12px;">
             <button id="edit-save-btn">Save</button>
@@ -366,11 +395,15 @@ addReactionGroupBtn.onclick = () => {
           );
         }
         const currentHex = rgbToHex(currentColor);
+        let found = false;
         swatches.forEach((swatch) => {
           if (swatch.getAttribute("data-color").toLowerCase() === currentHex.toLowerCase()) {
             swatch.classList.add("selected");
+            found = true;
           }
         });
+        // If no match, select first swatch
+        if (!found && swatches.length > 0) swatches[0].classList.add("selected");
 
         swatches.forEach((swatch) => {
           swatch.onclick = () => {
