@@ -79,7 +79,14 @@ async function handleAuthSubmit() {
   const password = passInput.value;
   try {
     if (authMode === "login") {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          console.log("Login success:", userCredential.user);
+        })
+        .catch((error) => {
+          console.error("Login failed:", error.code, error.message);
+          throw error; // rethrow for outer catch
+        });
     } else {
       await createUserWithEmailAndPassword(auth, email, password);
     }
