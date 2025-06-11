@@ -1,55 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vidaro</title>
-  <link rel="stylesheet" href="style.css" />
-  <script type="module" src="app.js" defer></script>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.6">
+  <style type="text/css">
+    span.s1 {font-kerning: none}
+  </style>
 </head>
 <body>
-  <div class="header">
-    <h1>Vidaro: Where Video Meets Insight</h1>
-    <div id="auth-buttons">
-      <button id="login-btn">Log In</button>
-      <button id="signup-btn">Sign Up</button>
-      <button id="logout-btn" style="display: none;">Log Out</button>
-    </div>
-  </div>
-
-  <div class="main">
-    <div class="video-section">
-      <input id="video-url" type="text" placeholder="Paste YouTube or video file URL..." />
-      <button id="load-video">Load Video</button>
-      <div class="video-wrapper">
-        <iframe id="video-frame" width="640" height="360" frameborder="0" allowfullscreen></iframe>
-      </div>
-    </div>
-
-    <div class="reaction-controls">
-      <div id="reaction-group-container"></div>
-      <button id="add-reaction-group">+ Reaction Group</button>
-    </div>
-
-    <div class="folder-controls">
-      <select id="folder-select"></select>
-      <button id="add-folder">+ Folder</button>
-    </div>
-  </div>
-
-  <!-- Bubble Feedback -->
-  <div id="reaction-bubble" class="bubble hidden"></div>
-
-  <!-- Modal for Login/Signup -->
-  <div id="auth-modal" class="modal hidden">
-    <div class="modal-content">
-      <h2 id="auth-modal-title">Log In</h2>
-      <input id="email" type="email" placeholder="Email" />
-      <input id="password" type="password" placeholder="Password" />
-      <button id="auth-submit">Submit</button>
-      <button id="auth-cancel">Cancel</button>
-      <p id="auth-error" class="error-message"></p>
-    </div>
-  </div>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b>Vidaro: Where Video Meets Insight</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b>Log In Sign Up</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b>Load Video</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000; min-height: 15.0px"><span class="s1"><b></b></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000; min-height: 15.0px"><span class="s1"><b></b></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b>+ Reaction Group</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b>+ Folder</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000; min-height: 15.0px"><span class="s1"><b></b></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b>Log In</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b>Submit Cancel</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000; min-height: 15.0px"><span class="s1"><b></b></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000; min-height: 15.0px"><span class="s1"><b></b></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;!DOCTYPE html&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;html lang="en"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;head&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"/&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;title&gt;Vidaro&lt;/title&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;link rel="stylesheet" href="style.css" /&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;script type="module" src="app.js" defer&gt;&lt;/script&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;/head&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;body&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;div class="header"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;h1&gt;Vidaro: Where Video Meets Insight&lt;/h1&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;div id="auth-buttons"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;button id="login-btn"&gt;Log In&lt;/button&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;button id="signup-btn"&gt;Sign Up&lt;/button&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;button id="logout-btn" style="display: none;"&gt;Log Out&lt;/button&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;/div&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;/div&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000; min-height: 15.0px"><span class="s1"><b></b></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;div class="main"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;div class="video-section"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;input id="video-url" type="text" placeholder="Paste YouTube or video file URL..." /&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;button id="load-video"&gt;Load Video&lt;/button&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;div class="video-wrapper"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>&lt;iframe id="video-frame" width="640" height="360" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>&lt;div id="reaction-bubble" class="bubble hidden"&gt;&lt;/div&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;/div&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;/div&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000; min-height: 15.0px"><span class="s1"><b></b></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;div class="reaction-controls"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;div id="reaction-groups-container" class="reaction-columns"&gt;&lt;/div&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;button id="add-reaction-group"&gt;+ Reaction Group&lt;/button&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;/div&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000; min-height: 15.0px"><span class="s1"><b></b></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;div class="folder-controls"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;select id="folder-select"&gt;&lt;/select&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;button id="add-folder"&gt;+ Folder&lt;/button&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;/div&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;/div&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000; min-height: 15.0px"><span class="s1"><b></b></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;!-- Modal for Login/Signup --&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;div id="auth-modal" class="modal hidden"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;div class="modal-content"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;h2 id="auth-modal-title"&gt;Log In&lt;/h2&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;input id="email" type="email" placeholder="Email" /&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;input id="password" type="password" placeholder="Password" /&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;button id="auth-submit"&gt;Submit&lt;/button&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;button id="auth-cancel"&gt;Cancel&lt;/button&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>&lt;p id="auth-error" class="error-message"&gt;&lt;/p&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;/div&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;/div&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;/body&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 12.0px '.SF NS'; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;/html&gt;</b></span></h1>
 </body>
 </html>
