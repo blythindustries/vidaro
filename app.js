@@ -148,16 +148,31 @@ function convertYouTubeToEmbed(url) {
   return match ? `https://www.youtube.com/embed/${match[1]}` : url;
 }
 
-// Add Reaction Group (basic placeholder)
+// Add Reaction Group with user-defined group and reaction customization
 addReactionGroupBtn.onclick = () => {
+  const groupName = prompt("Enter a name for the reaction group:");
+  if (!groupName) return;
+
   const groupDiv = document.createElement("div");
   groupDiv.className = "reaction-group";
-  ["Needs Improvement", "Good", "Excellent"].forEach((label) => {
+
+  const title = document.createElement("h3");
+  title.textContent = groupName;
+  groupDiv.appendChild(title);
+
+  let numReactions = parseInt(prompt("How many reactions? (3 to 5)"), 10);
+  if (isNaN(numReactions) || numReactions < 3 || numReactions > 5) {
+    numReactions = 3;
+  }
+
+  for (let i = 0; i < numReactions; i++) {
+    const reactionLabel = prompt(`Enter label for reaction ${i + 1}:`, `Reaction ${i + 1}`);
     const btn = document.createElement("button");
-    btn.textContent = label;
-    btn.onclick = () => showBubble(label);
+    btn.textContent = reactionLabel;
+    btn.onclick = () => showBubble(`${groupName} - ${reactionLabel}`);
     groupDiv.appendChild(btn);
-  });
+  }
+
   reactionGroupContainer.appendChild(groupDiv);
 };
 
