@@ -93,6 +93,7 @@ async function handleAuthSubmit() {
     signupBtn.style.display = "none";
     logoutBtn.style.display = "inline-block";
   } catch (error) {
+    console.error("Authentication error:", error);
     switch (error.code) {
       case "auth/user-not-found":
         authError.textContent = "No account found with this email.";
