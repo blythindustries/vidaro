@@ -188,101 +188,183 @@ function convertYouTubeToEmbed(url) {
   reactionBubble.style.transition = "opacity 0.3s ease";
 })();
 
-// Add Reaction Group with user-defined group and reaction customization
+// Add Reaction Group with visual color palette and structured UI for reactions
 addReactionGroupBtn.onclick = () => {
-  const groupName = prompt("Enter a name for the reaction group:");
-  if (!groupName) return;
+  // Create modal backdrop
+  const modalBackdrop = document.createElement("div");
+  modalBackdrop.className = "modal-backdrop";
 
-  const groupDiv = document.createElement("div");
-  groupDiv.className = "reaction-group";
-  groupDiv.style.display = "flex";
-  groupDiv.style.flexDirection = "column";
-  groupDiv.style.alignItems = "flex-start";
-  groupDiv.style.marginRight = "20px";
-  groupDiv.style.minWidth = "150px";
+  const modal = document.createElement("div");
+  modal.className = "reaction-modal";
 
-  const title = document.createElement("h3");
-  title.textContent = groupName;
-  groupDiv.appendChild(title);
+  modal.innerHTML = `
+    <h2>Create Reaction Group</h2>
+    <label>Group Name: <input type="text" id="group-name" /></label>
+    <label>Number of Reactions (3 to 5): <input type="number" id="reaction-count" min="3" max="5" value="3" /></label>
+    <div id="reaction-fields"></div>
+    <div class="modal-buttons">
+      <button id="confirm-group">Add Group</button>
+      <button id="cancel-group">Cancel</button>
+    </div>
+  `;
 
-  let numReactions = parseInt(prompt("How many reactions? (3 to 5)"), 10);
-  if (isNaN(numReactions) || numReactions < 3 || numReactions > 5) {
-    numReactions = 3;
+  document.body.appendChild(modalBackdrop);
+  document.body.appendChild(modal);
+
+  const groupNameInput = modal.querySelector("#group-name");
+  const countInput = modal.querySelector("#reaction-count");
+  const fieldsContainer = modal.querySelector("#reaction-fields");
+
+  function renderReactionFields(count) {
+    fieldsContainer.innerHTML = "";
+    for (let i = 0; i < count; i++) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "reaction-field";
+      wrapper.innerHTML = `
+        <label>Label ${i + 1}: <input type="text" class="reaction-label" value="Reaction ${i + 1}" /></label>
+        <label>Color ${i + 1}: <select class="reaction-color">
+          <option value="#4285f4">Blue</option>
+          <option value="#ea4335">Red</option>
+          <option value="#fbbc05">Yellow</option>
+          <option value="#34a853">Green</option>
+          <option value="#ff6f00">Orange</option>
+          <option value="#9c27b0">Purple</option>
+        </select></label>
+      `;
+      fieldsContainer.appendChild(wrapper);
+    }
   }
 
-  for (let i = 0; i < numReactions; i++) {
-    const reactionLabel = prompt(`Enter label for reaction ${i + 1}:`, `Reaction ${i + 1}`);
-    const reactionColor = prompt(`Enter background color for reaction ${i + 1} (e.g. red, #ff0000):`, "#cccccc");
+  renderReactionFields(parseInt(countInput.value, 10));
 
-    const btnWrapper = document.createElement("div");
-    btnWrapper.style.display = "flex";
-    btnWrapper.style.alignItems = "center";
-    btnWrapper.style.marginBottom = "5px";
-
-    const btn = document.createElement("button");
-    btn.textContent = reactionLabel;
-    btn.style.backgroundColor = reactionColor || "#cccccc";
-    btn.style.border = "none";
-    btn.style.color = "white";
-    btn.style.padding = "5px 10px";
-    btn.style.marginRight = "5px";
-    btn.style.borderRadius = "3px";
-    btn.style.cursor = "pointer";
-    btn.onclick = () => showBubble(`${groupName} - ${btn.textContent}`);
-
-    // Edit button
-    const editBtn = document.createElement("button");
-    editBtn.textContent = "Edit";
-    editBtn.style.marginRight = "5px";
-    editBtn.style.padding = "3px 6px";
-    editBtn.style.fontSize = "0.8em";
-    editBtn.style.cursor = "pointer";
-    editBtn.onclick = () => {
-      const newLabel = prompt("Enter new label:", btn.textContent);
-      if (newLabel !== null && newLabel.trim() !== "") {
-        btn.textContent = newLabel;
-      }
-      const newColor = prompt("Enter new background color (e.g. red, #ff0000):", btn.style.backgroundColor);
-      if (newColor !== null && newColor.trim() !== "") {
-        btn.style.backgroundColor = newColor;
-      }
-    };
-
-    // Delete button
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Delete";
-    deleteBtn.style.padding = "3px 6px";
-    deleteBtn.style.fontSize = "0.8em";
-    deleteBtn.style.cursor = "pointer";
-    deleteBtn.onclick = () => {
-      btnWrapper.remove();
-    };
-
-    btnWrapper.appendChild(btn);
-    btnWrapper.appendChild(editBtn);
-    btnWrapper.appendChild(deleteBtn);
-    groupDiv.appendChild(btnWrapper);
-  }
-
-  // Delete Group button
-  const deleteGroupBtn = document.createElement("button");
-  deleteGroupBtn.textContent = "Delete Group";
-  deleteGroupBtn.style.marginTop = "10px";
-  deleteGroupBtn.style.padding = "5px 10px";
-  deleteGroupBtn.style.cursor = "pointer";
-  deleteGroupBtn.style.backgroundColor = "#d9534f";
-  deleteGroupBtn.style.color = "white";
-  deleteGroupBtn.style.border = "none";
-  deleteGroupBtn.style.borderRadius = "3px";
-  deleteGroupBtn.onclick = () => {
-    groupDiv.remove();
+  countInput.onchange = () => {
+    let count = parseInt(countInput.value, 10);
+    if (isNaN(count) || count < 3) count = 3;
+    if (count > 5) count = 5;
+    renderReactionFields(count);
   };
-  groupDiv.appendChild(deleteGroupBtn);
 
-  // Insert groupDiv before addReactionGroupBtn only if addReactionGroupBtn is still in container
-  if (reactionGroupContainer.contains(addReactionGroupBtn)) {
-    reactionGroupContainer.insertBefore(groupDiv, addReactionGroupBtn);
-  }
+  modal.querySelector("#cancel-group").onclick = () => {
+    modal.remove();
+    modalBackdrop.remove();
+  };
+
+  modal.querySelector("#confirm-group").onclick = () => {
+    const groupName = groupNameInput.value.trim();
+    if (!groupName) return;
+
+    const labels = modal.querySelectorAll(".reaction-label");
+    for (const labelEl of labels) {
+      if (!labelEl.value.trim()) {
+        alert("Reaction labels cannot be empty.");
+        return;
+      }
+    }
+
+    const groupDiv = document.createElement("div");
+    groupDiv.className = "reaction-group";
+    groupDiv.style.display = "flex";
+    groupDiv.style.flexDirection = "column";
+    groupDiv.style.alignItems = "flex-start";
+    groupDiv.style.marginRight = "20px";
+    groupDiv.style.minWidth = "150px";
+
+    const title = document.createElement("h3");
+    title.textContent = groupName;
+    groupDiv.appendChild(title);
+
+    const colors = modal.querySelectorAll(".reaction-color");
+
+    labels.forEach((labelEl, i) => {
+      const reactionLabel = labelEl.value;
+      const reactionColor = colors[i].value;
+
+      const btnWrapper = document.createElement("div");
+      btnWrapper.style.display = "flex";
+      btnWrapper.style.alignItems = "center";
+      btnWrapper.style.marginBottom = "5px";
+
+      const btn = document.createElement("button");
+      btn.textContent = reactionLabel;
+      btn.style.backgroundColor = reactionColor;
+      btn.style.border = "none";
+      btn.style.color = "white";
+      btn.style.padding = "5px 10px";
+      btn.style.marginRight = "5px";
+      btn.style.borderRadius = "3px";
+      btn.style.cursor = "pointer";
+      btn.onclick = () => showBubble(`${groupName} - ${btn.textContent}`);
+
+      // Edit button
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "Edit";
+      editBtn.style.marginRight = "5px";
+      editBtn.style.padding = "3px 6px";
+      editBtn.style.fontSize = "0.8em";
+      editBtn.style.cursor = "pointer";
+      editBtn.onclick = () => {
+        const newLabel = prompt("Enter new label:", btn.textContent);
+        if (newLabel) btn.textContent = newLabel;
+
+        const colorOptions = ["#4285f4", "#ea4335", "#fbbc05", "#34a853", "#ff6f00", "#9c27b0"];
+        const currentColor = btn.style.backgroundColor;
+        const colorSelect = document.createElement("select");
+        colorOptions.forEach(color => {
+          const opt = document.createElement("option");
+          opt.value = color;
+          opt.textContent = color;
+          opt.selected = currentColor === color;
+          colorSelect.appendChild(opt);
+        });
+        const confirmColor = confirm("Use dropdown to select new color:");
+        if (confirmColor) {
+          document.body.appendChild(colorSelect);
+          colorSelect.style.position = "fixed";
+          colorSelect.style.top = "50%";
+          colorSelect.style.left = "50%";
+          colorSelect.style.zIndex = "9999";
+          colorSelect.onchange = () => {
+            btn.style.backgroundColor = colorSelect.value;
+            document.body.removeChild(colorSelect);
+          };
+        }
+      };
+
+      // Delete button
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "Delete";
+      deleteBtn.style.padding = "3px 6px";
+      deleteBtn.style.fontSize = "0.8em";
+      deleteBtn.style.cursor = "pointer";
+      deleteBtn.onclick = () => btnWrapper.remove();
+
+      btnWrapper.appendChild(btn);
+      btnWrapper.appendChild(editBtn);
+      btnWrapper.appendChild(deleteBtn);
+      groupDiv.appendChild(btnWrapper);
+    });
+
+    // Delete Group button
+    const deleteGroupBtn = document.createElement("button");
+    deleteGroupBtn.textContent = "Delete Group";
+    deleteGroupBtn.style.marginTop = "10px";
+    deleteGroupBtn.style.padding = "5px 10px";
+    deleteGroupBtn.style.cursor = "pointer";
+    deleteGroupBtn.style.backgroundColor = "#d9534f";
+    deleteGroupBtn.style.color = "white";
+    deleteGroupBtn.style.border = "none";
+    deleteGroupBtn.style.borderRadius = "3px";
+    deleteGroupBtn.onclick = () => groupDiv.remove();
+
+    groupDiv.appendChild(deleteGroupBtn);
+
+    if (reactionGroupContainer.contains(addReactionGroupBtn)) {
+      reactionGroupContainer.insertBefore(groupDiv, addReactionGroupBtn);
+    }
+
+    modal.remove();
+    modalBackdrop.remove();
+  };
 };
 
 // Show feedback bubble in top right of video

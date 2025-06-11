@@ -51,5 +51,58 @@
       </form>
     </div>
   </div>
+
+  <!-- Modal for Reaction Group Creation -->
+  <div id="reaction-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Create Reaction Group</h2>
+      <input id="reaction-group-name" type="text" placeholder="Group Name" />
+      <div id="reaction-entries">
+        <!-- Each entry is a row with text and color picker -->
+        <div class="reaction-entry">
+          <input type="text" placeholder="Reaction Label" />
+          <div class="color-palette">
+            <input type="color" value="#FFD600" />
+            <input type="color" value="#FF5252" />
+            <input type="color" value="#4CAF50" />
+            <input type="color" value="#2196F3" />
+            <input type="color" value="#FFB300" />
+            <input type="color" value="#AB47BC" />
+            <input type="color" value="#00B8D4" />
+            <input type="color" value="#F06292" />
+          </div>
+        </div>
+        <div class="reaction-entry">
+          <input type="text" placeholder="Reaction Label" />
+          <div class="color-palette">
+            <input type="color" value="#FFD600" />
+            <input type="color" value="#FF5252" />
+            <input type="color" value="#4CAF50" />
+            <input type="color" value="#2196F3" />
+            <input type="color" value="#FFB300" />
+            <input type="color" value="#AB47BC" />
+            <input type="color" value="#00B8D4" />
+            <input type="color" value="#F06292" />
+          </div>
+        </div>
+        <div class="reaction-entry">
+          <input type="text" placeholder="Reaction Label" />
+          <div class="color-palette">
+            <input type="color" value="#FFD600" />
+            <input type="color" value="#FF5252" />
+            <input type="color" value="#4CAF50" />
+            <input type="color" value="#2196F3" />
+            <input type="color" value="#FFB300" />
+            <input type="color" value="#AB47BC" />
+            <input type="color" value="#00B8D4" />
+            <input type="color" value="#F06292" />
+          </div>
+        </div>
+      </div>
+      <button id="add-reaction-entry">+ Add Reaction</button>
+      <button id="save-reaction-group">Save</button>
+      <button id="cancel-reaction-group">Cancel</button>
+    </div>
+  </div>
 </body>
 </html>
