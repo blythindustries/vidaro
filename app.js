@@ -127,25 +127,25 @@ logoutBtn.onclick = async () => {
   await signOut(auth);
 };
 
-// React to auth state
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("User logged in:", user.email);
-    loginBtn.style.display = "none";
-    signupBtn.style.display = "none";
-    logoutBtn.style.display = "inline-block";
-    setTimeout(() => {
+// Ensure DOM is fully loaded before listening to auth changes
+window.onload = () => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log("User logged in:", user.email);
+      loginBtn.style.display = "none";
+      signupBtn.style.display = "none";
+      logoutBtn.style.display = "inline-block";
       authModal.classList.add("hidden");
       emailInput.value = "";
       passInput.value = "";
       authError.textContent = "";
-    }, 0);
-  } else {
-    loginBtn.style.display = "inline-block";
-    signupBtn.style.display = "inline-block";
-    logoutBtn.style.display = "none";
-  }
-});
+    } else {
+      loginBtn.style.display = "inline-block";
+      signupBtn.style.display = "inline-block";
+      logoutBtn.style.display = "none";
+    }
+  });
+};
 
 // Load Video
 loadVideoBtn.onclick = () => {
