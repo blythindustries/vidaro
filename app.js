@@ -1,20 +1,5 @@
 // Firebase SDK imports
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-  getAuth,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-import { app, auth } from "./firebase-init.js";
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { auth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "./firebase-init.js";
 
 // DOM Elements
 const loginBtn = document.getElementById("login-btn");
